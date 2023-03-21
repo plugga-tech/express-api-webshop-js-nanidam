@@ -1,13 +1,5 @@
 @import "normalize";
-
-
-$yellow: #F8CC8A;
-$peach: #FFE8C7;
-$grey: #D9D9D9;
-$copper: #F8CC8A;
-$purple: #5836d0;
-$dark-purple: #3d008d;
-
+@import "colorpalette";
 
 .header {
     background-color: $yellow;
@@ -44,6 +36,63 @@ $dark-purple: #3d008d;
     }
 }
 
+// login page for user
+.login-page,
+.register-page {
+    position: fixed;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 95%;
+    max-width: 400px;
+    height: 55%;
+    background-color: $peach;
+    border: 2px solid black;
+    text-align: center;
+    z-index: 10;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .login-title,
+    .register-title {
+        color: $purple;
+        margin-top: 50px;
+        margin-bottom: 50px;
+    }
+
+    .input-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 10px;
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 5px;
+            font-size: 16px;
+        }
+    }
+
+    .login-user-btn,
+    .register-user-btn {
+        margin-top: 20px;
+        padding: 10px;
+        background-color: $yellow;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        width: 50%;
+        cursor: pointer;
+    }
+}
+
 
 //category bar
 .categories-container {
@@ -63,20 +112,18 @@ $dark-purple: #3d008d;
     }
 }
 
+// all products
 .products {
     display: flex;
     flex-wrap: wrap;
-    // margin-left: 30px;
-    // margin-top: 20px;
-    // margin-bottom: 20px;
 
+    //one product
     .product {
         display: flex;
         flex-direction: column;
         align-items: center;
         width: 50%;
         margin-top: 20px;
-        margin-bottom: 10px;
 
         .product-img {
             outline: 2px solid purple;
@@ -99,6 +146,7 @@ $dark-purple: #3d008d;
             }
         }
 
+        //product name + product price
         .product-info {
             display: flex;
             flex-direction: column;
@@ -113,4 +161,19 @@ $dark-purple: #3d008d;
             }
         }
     }
+}
+
+//transparent background effect for when login-page/register-page appears
+.bg-popup {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.558);
+    z-index: 5;
+}
+
+.hidden {
+    display: none;
 }

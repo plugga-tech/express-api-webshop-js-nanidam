@@ -23,6 +23,36 @@
         <a href="" class="user-nav-icon" id="favorite"><i class="fas fa-heart"></i></a>
         <a href="" class="user-nav-icon" id="cart"><i class="fas fa-shopping-cart"></i></a>
     </div>
+    <!-- TODO:hidden -->
+    <div class="bg-popup hidden"></div>
+    <div class="login-page hidden">
+        <h2 class="login-title">Logga in</h2>
+        <div class="input-wrapper">
+            <label for="user-email">E-post:</label>
+            <input id="user-email" type="text" placeholder="Din e-post">
+        </div>
+        <div class="input-wrapper">
+            <label for="user-password">Lösenord:</label>
+            <input id="user-password" type="password" placeholder="Ditt lösenord">
+        </div>
+        <button class="login-user-btn">Logga in</button>
+    </div>
+    <div class="register-page hidden">
+        <h2 class="register-title">Registrera</h2>
+        <div class="input-wrapper">
+            <label for="register-username">Namn:</label>
+            <input id="register-username" type="text" placeholder="Ditt namn">
+        </div>
+        <div class="input-wrapper">
+            <label for="register-user-email">E-post:</label>
+            <input id="register-user-email" type="text" placeholder="Din e-post">
+        </div>
+        <div class="input-wrapper">
+            <label for="register-user-password">Lösenord:</label>
+            <input id="register-user-password" type="password" placeholder="Ditt lösenord">
+        </div>
+        <button class="register-user-btn">Logga in</button>
+    </div>
 
     <section class="categories-container">
         <a href="" class="category">Överdelar</a>
@@ -32,6 +62,19 @@
         <a href="" class="category">Övrigt</a>
     </section>
     <section class="products">
+        <article class="product">
+            <img class="product-img" src="assets/random-product.jpeg" alt="product info">
+            <div class="product-counter-container">
+                <button>-</button>
+                <p><span class="product-count"></span> st</p>
+                <button>+</button>
+            </div>
+            <div class="product-info">
+                <p class="product-name">Produktnamn</p>
+                <p class="product-price">Pris</p>
+            </div>
+        </article>
+
         <article class="product">
             <img class="product-img" src="assets/random-product.jpeg" alt="product info">
             <div class="product-counter-container">
