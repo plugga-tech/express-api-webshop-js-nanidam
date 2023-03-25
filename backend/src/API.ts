@@ -2,7 +2,7 @@ import type { Request, Response } from "express";
 import type { IOrder, IProduct, IUser } from "./models/interfaces";
 
 export class API {
-  addUser(req: Request) {
+  addUser(req: Request, res: Response) {
     const newUser = {
       name: req.body.name,
       password: req.body.password,
@@ -10,16 +10,13 @@ export class API {
     };
 
     req.app.locals["db"].collection("users").insertOne(newUser);
-  }
 
-  //   deleteUser(req: Request) {
-  //     req.app.locals["db"]
-  //       .collection("users")
-  //       .deleteOne({ userName: req.body.userName })
-  //       .then((results: []) => {
-  //         console.log(results);
-  //       });
-  //   }
+    if (newUser) {
+      res.status(201).json(newUser);
+    } else {
+      res.send(404).json("User not added.");
+    }
+  }
 
   logInUser(req: Request, res: Response) {
     const { email, password } = req.body;
@@ -40,12 +37,12 @@ export class API {
             email: foundUser.email,
           });
         } else {
-          res.status(401).json("Felaktig e-mail eller lösenord");
+          res.status(401).json("Wrong e-mail or password");
         }
       });
   }
 
-  addProduct(req: Request) {
+  addProduct(req: Request, res: Response) {
     const newProduct: IProduct = {
       name: req.body.name,
       description: req.body.description,
@@ -57,13 +54,30 @@ export class API {
 
     req.app.locals["productsDB"].collection("products").insertOne(newProduct);
 
+    if (newProduct) {
+      res.status(201).json(newProduct);
+    } else {
+      res.status(406).json("Product not added");
+    }
+
     //add many products
     // const newProducts: IProduct[] = req.body;
     // req.app.locals["productsDB"].collection("products").insertMany(newProducts);
+    // if (newProducts) {
+    //   res.status(201).json(newProducts);
+    // } else {
+    //   res.status(406).json("Products not added");
+    // }
   }
 
-  addOrder(req: Request) {
+  addOrder(req: Request, res: Response) {
     const newOrder: IOrder = req.body;
     req.app.locals["ordersDB"].collection("orders").insertOne(newOrder);
+
+    if (newOrder) {
+      res.status(201).json(newOrder);
+    } else {
+      res.status(406).json("Order not added");
+    }
   }
 }

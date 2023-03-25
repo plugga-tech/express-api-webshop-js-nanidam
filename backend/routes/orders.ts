@@ -6,7 +6,7 @@ const router = express.Router();
 const api = new API();
 
 router.post("/add", function (req: Request, res: Response) {
-  api.addOrder(req);
+  api.addOrder(req, res);
   res.send("Order added!");
 });
 
