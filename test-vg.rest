@@ -115,7 +115,7 @@ Content-Type: application/json
 
 {
   "user": "// USER ID FÖR DEN SOM SKA SKAPA ORDERN",
-      "products": [
+  "products": [
     {
       "productId": "// ETT PRODUKT ID",
       "quantity": 1

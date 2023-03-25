@@ -13,15 +13,22 @@ import cookieParser from "cookie-parser";
 const app: Application = express();
 const port = 3000;
 
+//TODO: change db to better name
 MongoClient.connect("mongodb://127.0.0.1:27017", {}).then(
   (client: MongoClient) => {
     console.log("mongoDb is working!");
 
+    //Users
     const db = client.db("users");
     app.locals["db"] = db;
 
+    //Products
     const productsDB = client.db("products");
     app.locals["productsDB"] = productsDB;
+
+    //Orders
+    const ordersDB = client.db("orders");
+    app.locals["ordersDB"] = ordersDB;
   }
 );
 

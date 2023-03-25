@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import type { IProduct, IUser } from "./models/interfaces";
+import type { IOrder, IProduct, IUser } from "./models/interfaces";
 
 export class API {
   addUser(req: Request) {
@@ -57,8 +57,13 @@ export class API {
 
     req.app.locals["productsDB"].collection("products").insertOne(newProduct);
 
-    //insert many
-    // const newProduct: IProduct[] = req.body;
-    // req.app.locals["productsDB"].collection("products").insertMany(newProduct);
+    //add many products
+    // const newProducts: IProduct[] = req.body;
+    // req.app.locals["productsDB"].collection("products").insertMany(newProducts);
+  }
+
+  addOrder(req: Request) {
+    const newOrder: IOrder = req.body;
+    req.app.locals["ordersDB"].collection("orders").insertOne(newOrder);
   }
 }

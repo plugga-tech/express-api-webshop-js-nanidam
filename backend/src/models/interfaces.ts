@@ -13,3 +13,13 @@ export interface IProduct {
   category: number;
   token: string | undefined;
 }
+
+type productOrder = {
+  productId: string;
+  quantity: number;
+};
+
+export interface IOrder {
+  user: string;
+  products: productOrder[];
+}
