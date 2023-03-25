@@ -3,6 +3,7 @@ import { MongoClient } from "mongodb";
 
 import usersRouter from "../routes/users.js";
 import productsRouter from "../routes/products.js";
+import ordersRouter from "../routes/orders.js";
 
 import logger from "morgan";
 import path from "path";
@@ -43,6 +44,7 @@ app.use(express.static(publicPath));
 
 app.use("/api/users", usersRouter);
 app.use("/api/products", productsRouter);
+app.use("/api/orders", ordersRouter);
 
 app.listen(port, () => {
   console.log(port);
