@@ -1,0 +1,23 @@
+{
+  "name": "express-api-webshop-js-nanidam",
+  "version": "1.0.0",
+  "description": "En lösningsarkitekt har redan dokumenterat vilka endpoints som skall finnas för API’et samt skrivit ett test flöde med REST-Client som ni kan börja utveckal med. Dvs vilka endpoints och vad de skall heta samt vad de förväntas returnera är redan förutbestämt.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "vite"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/plugga-tech/express-api-webshop-js-nanidam.git"
+  },
+  "author": "Nani Dam",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/plugga-tech/express-api-webshop-js-nanidam/issues"
+  },
+  "homepage": "https://github.com/plugga-tech/express-api-webshop-js-nanidam#readme",
+  "devDependencies": {
+    "vite": "^4.2.1"
+  }
+}
