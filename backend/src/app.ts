@@ -8,12 +8,10 @@ import cors from "cors";
 import logger from "morgan";
 import path from "path";
 import cookieParser from "cookie-parser";
-// import bodyParser from "body-parser";
 
 const app: Application = express();
 const port = 3000;
 
-//TODO: change db to better name
 MongoClient.connect("mongodb://127.0.0.1:27017", {}).then(
   (client: MongoClient) => {
     console.log("mongoDb is working!");
@@ -40,7 +38,6 @@ app.get("/", (_req: Request, res: Response) => {
   res.send("Hello World!");
 });
 
-// app.use(bodyParser.json());
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

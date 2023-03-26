@@ -1,2 +1,5 @@
-Placera din backend-kod i denna mapp.
-Dokumentera tydligt om det är några speciella instruktioner för att starta projektet.
+För att starta projektet i backend:
+
+- Skriv i terminalen "npm run dev".
+
+Nodemon startas då.

@@ -90,6 +90,7 @@ export class API {
       token: req.body.token,
     };
 
+    //check token
     if (newCategory.token) {
       req.app.locals["categoriesDB"]
         .collection("categories")

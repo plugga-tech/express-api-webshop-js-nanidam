@@ -1,11 +1,14 @@
 import axios from "axios";
-import { exit } from "process";
 import { IProduct, IProductListItem } from "./models/interfaces";
 
+//Login
 const loggedinUsername = document.querySelector(
   ".logged-in-username"
 ) as HTMLParagraphElement;
 const loginIcon = document.getElementById("login-icon") as HTMLElement;
+const bgPopup = document.querySelector(".bg-popup") as HTMLDivElement;
+
+//Order
 const orderIcon = document.getElementById("favorite-icon") as HTMLElement;
 const orderContainer = document.querySelector(
   ".order-container"
@@ -14,9 +17,6 @@ const exitOrderBtn = document.querySelector(
   ".exit-order-btn"
 ) as HTMLButtonElement;
 const order = document.querySelector(".order") as HTMLDivElement;
-
-const cartIcon = document.getElementById("cart-icon") as HTMLElement;
-const bgPopup = document.querySelector(".bg-popup") as HTMLDivElement;
 
 //Login variables
 const loginPage = document.querySelector(".login-page") as HTMLDivElement;
@@ -49,6 +49,7 @@ const inputRegisterUserPassword = document.getElementById(
 ) as HTMLInputElement;
 
 //Cart variables
+const cartIcon = document.getElementById("cart-icon") as HTMLElement;
 const cart = document.querySelector(".cart") as HTMLDivElement;
 const cartContainer = document.querySelector(
   ".cart-container"
@@ -76,7 +77,7 @@ if (!initCart) {
   localStorage.setItem("cart", JSON.stringify([]));
 }
 
-// get all products
+//Get all products
 const configProduct = {
   headers: {
     "Content-type": "application/json",
@@ -88,6 +89,7 @@ const configProduct = {
 const initProduct = await axios(configProduct);
 const productsContainer = document.querySelector(".products") as HTMLElement;
 
+//Create each products from database
 const createProduct = () => {
   const localStorageCart = JSON.parse(initCart!);
 
@@ -123,7 +125,7 @@ const createProduct = () => {
 
 createProduct();
 
-//Products
+//Products variables. Must be after createproducts
 const productImg = document.querySelector(".product-img") as HTMLImageElement;
 const subtractProductBtns = document.querySelectorAll(
   ".product-decrease-btn"
@@ -138,7 +140,7 @@ const productPrice = document.querySelector(
   ".product-price"
 ) as HTMLParagraphElement;
 
-//Cart
+//Create cart with current content
 const renderCart = (cart: any) => {
   cartContainer.innerHTML = ``;
   cart.forEach((product: { count: number; name: string; price: number }) => {
@@ -156,6 +158,7 @@ const renderCart = (cart: any) => {
     `;
   });
 
+  //Cart sum
   const totalSum = cart.reduce(
     (acc: number, product: { count: number; name: string; price: number }) =>
       acc + product.count * product.price,
@@ -164,8 +167,6 @@ const renderCart = (cart: any) => {
 
   cartTotalSum.textContent = totalSum;
 };
-
-//Cart total price
 
 //Add product btn
 addProductBtns.forEach((btn: HTMLButtonElement) => {
@@ -204,6 +205,7 @@ addProductBtns.forEach((btn: HTMLButtonElement) => {
       (prod: any) => prod.name === productName
     );
 
+    //If productindex is more or equal to 0
     if (productIndex >= 0) {
       newCart[productIndex].count += 1;
     } else {
@@ -219,6 +221,7 @@ subtractProductBtns.forEach((btn: HTMLButtonElement) => {
     const productCount = (e.currentTarget as HTMLElement).parentElement
       ?.childNodes[3].childNodes[0] as HTMLSpanElement;
     const numbCount = Number(productCount.innerHTML);
+
     const getProductName = (e.currentTarget as HTMLElement).parentElement
       ?.nextElementSibling?.childNodes[1].childNodes[0] as HTMLParagraphElement;
     const productName = getProductName.innerHTML;
@@ -231,6 +234,7 @@ subtractProductBtns.forEach((btn: HTMLButtonElement) => {
       const foundProduct: { name: string; _id: string } = initProduct.data.find(
         (prod: { name: string }) => prod.name === productName
       );
+
       const product = {
         name: productName,
         count: subtractCount,
@@ -272,9 +276,6 @@ registerUser.addEventListener("click", () => {
 
 //Login btn
 loginUser.addEventListener("click", async () => {
-  // loginPage.classList.add("hidden");
-  // bgPopup.classList.add("hidden");
-
   const configLoginUser = {
     method: "POST",
     url: "http://localhost:3000/api/users/login",
@@ -288,6 +289,7 @@ loginUser.addEventListener("click", async () => {
   };
 
   const loginUser = await axios(configLoginUser);
+
   if (loginUser.status === 202) {
     loginPage.classList.add("hidden");
     bgPopup.classList.add("hidden");
@@ -327,6 +329,7 @@ registerUserBtn.addEventListener("click", async () => {
 cartIcon.addEventListener("click", () => {
   cart.classList.remove("hidden");
   bgPopup.classList.remove("hidden");
+
   const currentCart = JSON.parse(localStorage.getItem("cart") || "[]");
   renderCart(currentCart);
 });
@@ -343,7 +346,6 @@ cartSendBtn.addEventListener("click", async () => {
   }
 
   const currentCart = JSON.parse(localStorage.getItem("cart") || "[]");
-
   const productList: IProductListItem[] = [];
 
   if (currentCart.length) {
@@ -369,16 +371,18 @@ cartSendBtn.addEventListener("click", async () => {
   const sendOrder = await axios(configOrders);
   if (sendOrder.status === 201) {
     alert("Order skickad!");
-    //Empty localstorage
+
+    //Empty localstorage and productscontainer
     localStorage.setItem("cart", JSON.stringify([]));
     productsContainer.innerHTML = "";
+
     createProduct();
     cart.classList.add("hidden");
     bgPopup.classList.add("hidden");
   }
 });
 
-//Cancel cart
+//Cancel cart btn
 cartCancelBtn.addEventListener("click", () => {
   cart.classList.add("hidden");
   bgPopup.classList.add("hidden");
@@ -410,12 +414,9 @@ orderIcon.addEventListener("click", async () => {
   };
 
   const seeOrders = await axios(configOrder);
-  // console.log(seeOrders.data);
-
   const userOrders = seeOrders.data;
 
   userOrders.forEach((order: any) => {
-    console.log(order.products);
     orderContainer.innerHTML += `
       <p>Order-ID: ${order._id}</p>
       <ul>
