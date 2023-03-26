@@ -477,6 +477,15 @@ template {
   text-align: left;
 }
 
+.order {
+  background-color: #FFE8C7;
+  border: 2px solid black;
+  position: fixed;
+  left: 15%;
+  height: 70%;
+  width: 60%;
+}
+
 .categories-container {
   height: 50px;
   display: flex;

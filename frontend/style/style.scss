@@ -149,8 +149,17 @@
         }
       }
     }
+}
+
+//Order = heart
+  .order {
+    background-color:$peach;
+    border: 2px solid black;
+    position: fixed;
+    left: 15%;
+    height: 70%;
+    width: 60%;
   }
-  
 
 
 

@@ -1,10 +1,20 @@
 import axios from "axios";
+import { exit } from "process";
 import { IProduct, IProductListItem } from "./models/interfaces";
 
 const loggedinUsername = document.querySelector(
   ".logged-in-username"
 ) as HTMLParagraphElement;
 const loginIcon = document.getElementById("login-icon") as HTMLElement;
+const orderIcon = document.getElementById("favorite-icon") as HTMLElement;
+const orderContainer = document.querySelector(
+  ".order-container"
+) as HTMLDivElement;
+const exitOrderBtn = document.querySelector(
+  ".exit-order-btn"
+) as HTMLButtonElement;
+const order = document.querySelector(".order") as HTMLDivElement;
+
 const cartIcon = document.getElementById("cart-icon") as HTMLElement;
 const bgPopup = document.querySelector(".bg-popup") as HTMLDivElement;
 
@@ -326,7 +336,7 @@ cartSendBtn.addEventListener("click", async () => {
   const foundLoggedinUser = JSON.parse(
     localStorage.getItem("loggedInUser") || "[]"
   );
-  console.log(foundLoggedinUser);
+
   if (Array.isArray(foundLoggedinUser)) {
     alert("Var vänlig, logga in :)");
     return;
@@ -372,4 +382,47 @@ cartSendBtn.addEventListener("click", async () => {
 cartCancelBtn.addEventListener("click", () => {
   cart.classList.add("hidden");
   bgPopup.classList.add("hidden");
+});
+
+//Order = heart-icon
+orderIcon.addEventListener("click", async () => {
+  order.classList.remove("hidden");
+
+  const foundLoggedinUser = JSON.parse(
+    localStorage.getItem("loggedInUser") || "[]"
+  );
+
+  if (Array.isArray(foundLoggedinUser)) {
+    alert("Var vänlig, logga in :)");
+    return;
+  }
+
+  const configOrder = {
+    method: "POST",
+    url: "http://localhost:3000/api/orders/user",
+    headers: {
+      "Content-type": "application/json",
+    },
+    data: {
+      user: foundLoggedinUser.id,
+      token: "1234key1234",
+    },
+  };
+
+  const seeOrders = await axios(configOrder);
+  // console.log(seeOrders.data);
+
+  const frudd = seeOrders.data;
+  frudd.forEach((order: any) => {
+    orderContainer.innerHTML += `
+      <p>${order._id}</p>
+      <ul>
+          <li>ProduktID: ${order.products._id}, Antal: ${order.products.quantity}</li>
+      </ul>
+    `;
+  });
+});
+
+exitOrderBtn.addEventListener("click", () => {
+  order.classList.add("hidden");
 });
