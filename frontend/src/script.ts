@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const loginIcon = document.getElementById("login-icon") as HTMLElement;
 const cartIcon = document.getElementById("cart-icon") as HTMLElement;
 const bgPopup = document.querySelector(".bg-popup") as HTMLDivElement;
@@ -25,6 +27,63 @@ const cartCancelBtn = document.querySelector(
 const cartSendBtn = document.querySelector(
   ".cart-send-btn"
 ) as HTMLButtonElement;
+
+//Products
+const productsContainer = document.querySelector(".products") as HTMLElement;
+const productImg = document.querySelector(".product-img") as HTMLImageElement;
+const subtractProductBtn = document.querySelector(
+  ".product-decrease-btn"
+) as HTMLImageElement;
+const addProductBtn = document.querySelector(
+  ".product-increase-btn"
+) as HTMLImageElement;
+const productName = document.querySelector(
+  ".product-name"
+) as HTMLParagraphElement;
+const productPrice = document.querySelector(
+  ".product-price"
+) as HTMLParagraphElement;
+
+// get all products
+const productConfig = {
+  headers: {
+    "Content-type": "application/json",
+  },
+  method: "GET",
+  url: "http://localhost:3000/api/products",
+};
+
+const initProduct = await axios(productConfig);
+console.log(initProduct.data);
+
+interface IProduct {
+  name: string;
+  description: string;
+  price: number;
+  lager: number;
+  category: number;
+  token: string | undefined;
+}
+const createProduct = () => {
+  initProduct.data.forEach((product: IProduct) => {
+    productsContainer.innerHTML += `
+    <article class="product">
+              <img class="product-img" src="assets/random-product.jpeg" alt="product info">
+              <div class="product-counter-container">
+                  <button class="product-decrease-btn">-</button>
+                  <p><span class="product-count"></span class"product-count"> st</p>
+                  <button class="product-increase-btn">+</button>
+              </div>
+              <div class="product-info">
+                  <p class="product-name"><b>${product.name}</b></p>
+                  <p><span class="product-price">${product.price}</span> kr</p>
+              </div>
+          </article>
+    `;
+  });
+};
+
+createProduct();
 
 //Open login for user
 loginIcon.addEventListener("click", () => {

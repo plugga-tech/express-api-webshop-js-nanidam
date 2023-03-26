@@ -1,11 +1,10 @@
 import express, { Application, Request, Response } from "express";
 import { MongoClient } from "mongodb";
-
 import usersRouter from "../routes/users.js";
 import productsRouter from "../routes/products.js";
 import ordersRouter from "../routes/orders.js";
 import categoriesRouter from "../routes/categories.js";
-
+import cors from "cors";
 import logger from "morgan";
 import path from "path";
 import cookieParser from "cookie-parser";
@@ -52,8 +51,9 @@ const publicPath = path.resolve(
   "..",
   "public"
 );
-app.use(express.static(publicPath));
 
+app.use(cors());
+app.use(express.static(publicPath));
 app.use("/api/users", usersRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/orders", ordersRouter);
