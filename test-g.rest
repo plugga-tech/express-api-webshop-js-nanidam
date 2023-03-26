@@ -13,8 +13,12 @@ POST http://localhost:3000/api/users/
 Content-Type: application/json
 
 {
-  "id": "// EN USER ID"
+  "id": "641f94cb90d021521172d114"
 }
+
+# {
+#   "id": "// EN USER ID"
+# }
 
 ###
 
@@ -58,7 +62,7 @@ GET http://localhost:3000/api/products
 ###
 
 // HÄMTA SPECIFIK PRODUKT
-GET http://localhost:3000/api/products/ // ID PÅ PRODUKT
+GET http://localhost:3000/api/products/
 
 ###
 

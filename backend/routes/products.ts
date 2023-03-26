@@ -9,10 +9,10 @@ const api = new API();
 // If "id" exist -> show product, otherwise get ALL products
 router.get("/", (req, res) => {
   const DB = req.app.locals["productsDB"].collection("products");
-
+  console.log(req.body);
   if (req.body.id) {
     DB.findOne({ _id: new ObjectId(req.body.id) }).then((result: IProduct) => {
-      console.log(result);
+      // console.log(result);
       if (result) {
         res.status(200).json(result);
       } else {
@@ -39,7 +39,24 @@ router.post("/add", function (req: Request, res: Response) {
     api.addProduct(req, res);
     res.status(201).json("Token accepted - product added");
   } else {
-    res.status(406).json("Wrong token");
+    res.status(406).json("Something went wrong. Product not added");
+  }
+});
+
+//Get all products of a category
+router.get("/category", function (req: Request, res: Response) {
+  const productCategory = req.body.category;
+
+  if (productCategory < 5 || productCategory > 1) {
+    req.app.locals["productsDB"]
+      .collection("products")
+      .find({ category: productCategory })
+      .toArray()
+      .then((result: IProduct[]) => {
+        res.status(200).json(result);
+      });
+  } else {
+    res.status(401).json("Category not found");
   }
 });
 
