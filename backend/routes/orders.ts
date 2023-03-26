@@ -28,18 +28,20 @@ router.post("/add", function (req: Request, res: Response) {
 
 //Get order for specific user. Must have TOKEN-key
 router.post("/user", function (req: Request, res: Response) {
-  console.log(req.body.token);
-
-  req.app.locals["ordersDB"]
-    .collection("orders")
-    .findOne({ user: req.body.user })
-    .then((foundOrder: IOrder) => {
-      if (foundOrder) {
-        res.status(200).json(foundOrder);
-      } else {
-        res.status(404).json("Order not found.");
-      }
-    });
+  if (req.body.token === process.env["TOKEN"]) {
+    req.app.locals["ordersDB"]
+      .collection("orders")
+      .findOne({ user: req.body.user })
+      .then((foundOrder: IOrder) => {
+        if (foundOrder) {
+          res.status(200).json(foundOrder);
+        } else {
+          res.status(404).json("Orders not found.");
+        }
+      });
+  } else {
+    res.status(401).json("Wrong or missing token.");
+  }
 });
 
 export default router;

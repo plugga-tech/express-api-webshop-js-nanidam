@@ -413,6 +413,10 @@ template {
   padding: 5px;
   font-size: 16px;
 }
+.login-page .user-register,
+.register-page .user-register {
+  cursor: pointer;
+}
 .login-page .login-user-btn,
 .login-page .register-user-btn,
 .register-page .login-user-btn,
