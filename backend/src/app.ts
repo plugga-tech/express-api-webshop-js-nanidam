@@ -4,6 +4,7 @@ import { MongoClient } from "mongodb";
 import usersRouter from "../routes/users.js";
 import productsRouter from "../routes/products.js";
 import ordersRouter from "../routes/orders.js";
+import categoriesRouter from "../routes/categories.js";
 
 import logger from "morgan";
 import path from "path";
@@ -29,6 +30,10 @@ MongoClient.connect("mongodb://127.0.0.1:27017", {}).then(
     //Orders
     const ordersDB = client.db("orders");
     app.locals["ordersDB"] = ordersDB;
+
+    //Categories
+    const categoriesDB = client.db("categories");
+    app.locals["categoriesDB"] = categoriesDB;
   }
 );
 
@@ -52,6 +57,7 @@ app.use(express.static(publicPath));
 app.use("/api/users", usersRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/orders", ordersRouter);
+app.use("/api/categories", categoriesRouter);
 
 app.listen(port, () => {
   console.log(port);
