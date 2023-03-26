@@ -40,28 +40,15 @@ const inputRegisterUserPassword = document.getElementById(
 
 //Cart variables
 const cart = document.querySelector(".cart") as HTMLDivElement;
+const cartContainer = document.querySelector(
+  ".cart-container"
+) as HTMLDivElement;
 const cartCancelBtn = document.querySelector(
   ".cart-cancel-btn"
 ) as HTMLButtonElement;
 const cartSendBtn = document.querySelector(
   ".cart-send-btn"
 ) as HTMLButtonElement;
-
-// //Products
-// const productsContainer = document.querySelector(".products") as HTMLElement;
-// const productImg = document.querySelector(".product-img") as HTMLImageElement;
-// const subtractProductBtns = document.querySelectorAll(
-//   ".product-decrease-btn"
-// ) as NodeListOf<Element>;
-// const addProductBtns = document.querySelectorAll(
-//   ".product-increase-btn"
-// ) as NodeListOf<HTMLButtonElement>;
-// const productName = document.querySelector(
-//   ".product-name"
-// ) as HTMLParagraphElement;
-// const productPrice = document.querySelector(
-//   ".product-price"
-// ) as HTMLParagraphElement;
 
 // get all products
 const configProduct = {
@@ -84,7 +71,7 @@ const createProduct = () => {
               <img class="product-img" src="assets/random-product.jpeg" alt="product info">
               <div class="product-counter-container">
                   <button class="product-decrease-btn">-</button>
-                  <p><span class="product-count"></span class"product-count"> st</p>
+                  <p><span class="product-count">0</span class"product-count"> st</p>
                   <button class="product-increase-btn">+</button>
               </div>
               <div class="product-info">
@@ -102,7 +89,7 @@ createProduct();
 const productImg = document.querySelector(".product-img") as HTMLImageElement;
 const subtractProductBtns = document.querySelectorAll(
   ".product-decrease-btn"
-) as NodeListOf<Element>;
+) as NodeListOf<HTMLButtonElement>;
 const addProductBtns = document.querySelectorAll(
   ".product-increase-btn"
 ) as NodeListOf<HTMLButtonElement>;
@@ -113,13 +100,57 @@ const productPrice = document.querySelector(
   ".product-price"
 ) as HTMLParagraphElement;
 
+//Cart
+const renderCart = (productName, productCount, productPrice) => {
+  cartContainer.innerHTML += `
+  <div class="cart-product">
+    <img class="cart-product-img" src="assets/random-product.jpeg" alt="product info" height="100px">
+    <p><span class="cart-product-count">${productCount}</span> st</p>
+    <div class="cart-product-info">
+      <p class="cart-product-name">${productName}</p>
+      <p class="">Summa: <span class="cart-product-sum">${productPrice}</span> kr</p>
+    </div>
+  </div>
+  `;
+  console.log(productName, productCount, productPrice);
+};
+
 //Add product btn
 addProductBtns.forEach((btn: HTMLButtonElement) => {
   btn.addEventListener("click", (e: MouseEvent) => {
-    console.log(
-      (e.currentTarget as HTMLElement).parentElement?.nextElementSibling
-        ?.childNodes[1].childNodes[0].childNodes[0]
-    );
+    const getProductName = (e.currentTarget as HTMLElement).parentElement
+      ?.nextElementSibling?.childNodes[1].childNodes[0] as HTMLParagraphElement;
+    const productName = getProductName.innerHTML;
+
+    const getProductPrice = (e.currentTarget as HTMLElement).parentElement
+      ?.nextElementSibling?.childNodes[3].childNodes[0] as HTMLParagraphElement;
+    const productPrice = getProductPrice.innerHTML;
+
+    const productCount = (e.currentTarget as HTMLElement).parentElement
+      ?.childNodes[3].childNodes[0] as HTMLSpanElement;
+
+    const numbCount = Number(productCount.innerHTML);
+    const addCount = numbCount + 1;
+    const stringifyCount = String(addCount);
+
+    productCount.innerHTML = stringifyCount;
+    //name, count, price
+
+    renderCart(productName, addCount, productPrice);
+  });
+});
+
+subtractProductBtns.forEach((btn: HTMLButtonElement) => {
+  btn.addEventListener("click", (e: MouseEvent) => {
+    const productCount = (e.currentTarget as HTMLElement).parentElement
+      ?.childNodes[3].childNodes[0] as HTMLSpanElement;
+    const numbCount = Number(productCount.innerHTML);
+
+    if (numbCount > 0) {
+      const subtractCount = numbCount - 1;
+      const stringifyCount = String(subtractCount);
+      productCount.innerHTML = stringifyCount;
+    }
   });
 });
 
