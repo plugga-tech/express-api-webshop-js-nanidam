@@ -431,6 +431,49 @@ template {
   cursor: pointer;
 }
 
+.cart {
+  position: fixed;
+  top: 10%;
+  left: 5%;
+  width: 90%;
+  height: 80%;
+  background-color: #FFE8C7;
+  border: 2px solid black;
+  text-align: center;
+  z-index: 10;
+  position: relative;
+}
+.cart .cart-container {
+  background-color: white;
+  width: 92%;
+  margin: 4%;
+  overflow: scroll;
+}
+.cart .cart-container .cart-product {
+  display: flex; /* added property */
+  align-items: center; /* added property */
+  justify-content: space-between; /* added property */
+}
+.cart .cart-container .cart-product .cart-counter {
+  display: flex; /* added property */
+  align-items: center; /* added property */
+}
+.cart .cart-container .cart-product .cart-counter button {
+  margin: 0 0.5rem; /* added property */
+  font-weight: bold;
+}
+.cart .cart-container .cart-product .cart-counter p {
+  margin: 0;
+  font-size: 1.2rem;
+}
+.cart .cart-container .cart-product .cart-product-img {
+  margin-right: 1rem;
+}
+.cart .cart-container .cart-product .cart-product-info {
+  flex: 1;
+  text-align: left;
+}
+
 .categories-container {
   height: 50px;
   display: flex;

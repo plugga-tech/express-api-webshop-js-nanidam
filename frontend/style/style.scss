@@ -37,7 +37,7 @@
     }
 }
 
-// login page for user
+// login + register page for user
 .login-page,
 .register-page {
     position: fixed;
@@ -96,6 +96,61 @@
         cursor: pointer;
     }
 }
+
+//Cart
+.cart {
+    position: fixed;
+    top: 10%;
+    left: 5%;
+    width: 90%;
+    height: 80%;
+    background-color: $peach;
+    border: 2px solid black;
+    text-align: center;
+    z-index: 10;
+    position: relative;
+  
+    .cart-container {
+      background-color: white;
+      width: 92%;
+      margin: 4%;
+      overflow: scroll;
+  
+      .cart-product {
+        display: flex; /* added property */
+        align-items: center; /* added property */
+        justify-content: space-between; /* added property */
+        
+        .cart-counter {
+          display: flex; /* added property */
+          align-items: center; /* added property */
+          
+          button {
+            margin: 0 0.5rem; /* added property */
+            font-weight: bold;
+          }
+  
+          p {
+            margin: 0;
+            font-size: 1.2rem;
+          }
+        }
+  
+        .cart-product-img {
+          margin-right: 1rem;
+        }
+  
+        .cart-product-info {
+          flex: 1;
+          text-align: left;
+        }
+      }
+    }
+  }
+  
+
+
+
 
 //category bar
 .categories-container {
