@@ -49,6 +49,9 @@ const cartCancelBtn = document.querySelector(
 const cartSendBtn = document.querySelector(
   ".cart-send-btn"
 ) as HTMLButtonElement;
+const cartTotalSum = document.querySelector(
+  ".cart-total-sum"
+) as HTMLParagraphElement;
 
 //Localstorage for logged in user
 const savedLoginUser = localStorage.getItem("loggedInUser");
@@ -131,19 +134,33 @@ const productPrice = document.querySelector(
 ) as HTMLParagraphElement;
 
 //Cart
-const renderCart = (productName, productCount, productPrice) => {
-  cartContainer.innerHTML += `
-  <div class="cart-product">
-    <img class="cart-product-img" src="assets/random-product.jpeg" alt="product info" height="100px">
-    <p><span class="cart-product-count">${productCount}</span> st</p>
-    <div class="cart-product-info">
-      <p class="cart-product-name">${productName}</p>
-      <p class="">Summa: <span class="cart-product-sum">${productPrice}</span> kr</p>
-    </div>
-  </div>
-  `;
-  console.log(productName, productCount, productPrice);
+const renderCart = (cart: any) => {
+  cartContainer.innerHTML = ``;
+  cart.forEach((product: { count: number; name: string; price: number }) => {
+    cartContainer.innerHTML += `
+    <div class="cart-product">
+      <img class="cart-product-img" src="assets/random-product.jpeg" alt="product info" height="100px">
+      <p><span class="cart-product-count">${product.count}</span> st</p>
+      <div class="cart-product-info">
+        <p class="cart-product-name">${product.name}</p>
+        <p class="">Summa: <span class="cart-product-sum">${
+          product.count * product.price
+        }</span> kr</p>
+      </div>
+    </div>    
+    `;
+  });
+
+  const totalSum = cart.reduce(
+    (acc: number, product: { count: number; name: string; price: number }) =>
+      acc + product.count * product.price,
+    0
+  );
+
+  cartTotalSum.textContent = totalSum;
 };
+
+//Cart total price
 
 //Add product btn
 addProductBtns.forEach((btn: HTMLButtonElement) => {
@@ -299,8 +316,8 @@ registerUserBtn.addEventListener("click", async () => {
 cartIcon.addEventListener("click", () => {
   cart.classList.remove("hidden");
   bgPopup.classList.remove("hidden");
-
-  //render new cart from localstorage
+  const currentCart = JSON.parse(localStorage.getItem("cart") || "[]");
+  renderCart(currentCart);
 });
 
 //Cancel cart
