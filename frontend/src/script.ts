@@ -50,6 +50,19 @@ const cartSendBtn = document.querySelector(
   ".cart-send-btn"
 ) as HTMLButtonElement;
 
+//Localstorage for logged in user
+const savedLoginUser = localStorage.getItem("loggedInUser");
+if (savedLoginUser) {
+  const foundLoginUser = JSON.parse(savedLoginUser);
+  loggedinUsername.innerHTML = foundLoginUser.name;
+}
+
+//Localstorage for cart. If cart is empty => start cart as empty array
+const initCart = localStorage.getItem("cart");
+if (!initCart) {
+  localStorage.setItem("cart", JSON.stringify([]));
+}
+
 // get all products
 const configProduct = {
   headers: {
@@ -63,15 +76,32 @@ const initProduct = await axios(configProduct);
 // console.log(initProduct.data[0]);
 
 const productsContainer = document.querySelector(".products") as HTMLElement;
+const productCounter = document.querySelectorAll(
+  ".product-count"
+) as NodeListOf<HTMLSpanElement>;
 
 const createProduct = () => {
+  const localStorageCart = JSON.parse(initCart!);
+
   initProduct.data.forEach((product: IProduct) => {
+    let newCount = 0;
+
+    if (localStorageCart.length) {
+      for (let i = 0; i < localStorageCart.length; i++) {
+        const cartItem = localStorageCart[i];
+        if (product.name === cartItem.name) {
+          newCount = cartItem.count;
+          break;
+        }
+      }
+    }
+
     productsContainer.innerHTML += `
     <article class="product">
               <img class="product-img" src="assets/random-product.jpeg" alt="product info">
               <div class="product-counter-container">
                   <button class="product-decrease-btn">-</button>
-                  <p><span class="product-count">0</span class"product-count"> st</p>
+                  <p><span class="product-count">${newCount}</span class"product-count"> st</p>
                   <button class="product-increase-btn">+</button>
               </div>
               <div class="product-info">
@@ -134,9 +164,45 @@ addProductBtns.forEach((btn: HTMLButtonElement) => {
     const stringifyCount = String(addCount);
 
     productCount.innerHTML = stringifyCount;
-    //name, count, price
 
-    renderCart(productName, addCount, productPrice);
+    const product = {
+      name: productName,
+      count: addCount,
+      price: productPrice,
+    };
+
+    // const currentCart = localStorage.getItem("cart");
+    // const newCart = JSON.parse(currentCart!);
+
+    const currentCart = JSON.parse(localStorage.getItem("cart") || "[]");
+    const newCart = currentCart.slice();
+
+    const productIndex = newCart.findIndex(
+      (prod: any) => prod.name === productName
+    );
+
+    if (productIndex >= 0) {
+      newCart[productIndex].count += 1;
+    } else {
+      newCart.push(product);
+    }
+
+    localStorage.setItem("cart", JSON.stringify(newCart));
+
+    // if(foundProduct){
+    // REMOVE FOUNDPRODUCT FROM NEW CART + ADD NEW PROD IN LOCALSTORAGE
+
+    // } else {
+    //newCart.push(product);
+    // }
+    console.log(newCart);
+
+    // localStorage.setItem("cart", JSON.stringify(newCart));
+
+    // console.log(newCart.find(prod =>{
+    //   prod === product
+    // }));
+    // renderCart(productName, addCount, productPrice);
   });
 });
 
@@ -187,6 +253,7 @@ loginUser.addEventListener("click", async () => {
     loginPage.classList.add("hidden");
     bgPopup.classList.add("hidden");
     loggedinUsername.innerHTML = `${loginUser.data.name}`;
+    localStorage.setItem("loggedInUser", JSON.stringify(loginUser.data));
   }
 });
 
@@ -221,6 +288,8 @@ registerUserBtn.addEventListener("click", async () => {
 cartIcon.addEventListener("click", () => {
   cart.classList.remove("hidden");
   bgPopup.classList.remove("hidden");
+
+  //render new cart from localstorage
 });
 
 //Cancel cart
