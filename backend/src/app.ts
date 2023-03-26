@@ -19,8 +19,8 @@ MongoClient.connect("mongodb://127.0.0.1:27017", {}).then(
     console.log("mongoDb is working!");
 
     //Users
-    const db = client.db("users");
-    app.locals["db"] = db;
+    const usersDB = client.db("users");
+    app.locals["usersDB"] = usersDB;
 
     //Products
     const productsDB = client.db("products");

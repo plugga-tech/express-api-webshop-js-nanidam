@@ -1,15 +1,23 @@
 import type { Request, Response } from "express";
 import type { IOrder, IProduct, IUser } from "./models/interfaces";
+import crypto from "crypto-js";
+
+const SECRETKEY = "testFrudd";
 
 export class API {
   addUser(req: Request, res: Response) {
+    const savedPassword = crypto.AES.encrypt(
+      req.body.password,
+      SECRETKEY
+    ).toString();
+
     const newUser = {
       name: req.body.name,
-      password: req.body.password,
+      password: savedPassword,
       email: req.body.email,
     };
 
-    req.app.locals["db"].collection("users").insertOne(newUser);
+    req.app.locals["usersDB"].collection("users").insertOne(newUser);
 
     if (newUser) {
       res.status(201).json(newUser);
@@ -19,8 +27,9 @@ export class API {
   }
 
   logInUser(req: Request, res: Response) {
-    const { email, password } = req.body;
-    req.app.locals["db"]
+    const { email } = req.body;
+
+    req.app.locals["usersDB"]
       .collection("users")
       .find()
       .toArray()
@@ -30,7 +39,13 @@ export class API {
         );
 
         //when user's password matches with password in inputfield -> send back foundUser to frontend
-        if (foundUser && foundUser.password === password) {
+        if (
+          foundUser &&
+          foundUser.password ===
+            crypto.AES.decrypt(foundUser.password, SECRETKEY).toString(
+              crypto.enc.Utf8
+            )
+        ) {
           res.status(200).json({
             _id: foundUser._id,
             name: foundUser.name,

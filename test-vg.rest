@@ -35,9 +35,14 @@ POST http://localhost:3000/api/users/login
 Content-Type: application/json
 
 {
-  "email": "// USER EMAIL",
-  "password": "// USER PASSWORD"
+  "email": "test@mail.com",
+  "password": "test"
 }
+
+# {
+#   "email": "// USER EMAIL",
+#   "password": "// USER PASSWORD"
+# }
 
 ###
 
