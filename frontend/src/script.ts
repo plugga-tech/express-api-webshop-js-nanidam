@@ -76,8 +76,6 @@ const configProduct = {
 };
 
 const initProduct = await axios(configProduct);
-// console.log(initProduct.data[0]);
-
 const productsContainer = document.querySelector(".products") as HTMLElement;
 
 const createProduct = () => {
@@ -155,8 +153,6 @@ const renderCart = (cart: any) => {
   );
 
   cartTotalSum.textContent = totalSum;
-
-  console.log(cart);
 };
 
 //Cart total price
@@ -327,12 +323,14 @@ cartIcon.addEventListener("click", () => {
 
 //Send order
 cartSendBtn.addEventListener("click", async () => {
-  console.log("Send clicked");
   const foundLoggedinUser = JSON.parse(
-    localStorage.getItem("loggedInUser") || ""
+    localStorage.getItem("loggedInUser") || "[]"
   );
-
-  console.log(foundLoggedinUser.id);
+  console.log(foundLoggedinUser);
+  if (Array.isArray(foundLoggedinUser)) {
+    alert("Var vänlig, logga in :)");
+    return;
+  }
 
   const currentCart = JSON.parse(localStorage.getItem("cart") || "[]");
 
@@ -345,8 +343,6 @@ cartSendBtn.addEventListener("click", async () => {
       }
     );
   }
-
-  console.log(productList);
 
   const configOrders = {
     headers: {
@@ -361,13 +357,15 @@ cartSendBtn.addEventListener("click", async () => {
   };
 
   const sendOrder = await axios(configOrders);
-  console.log(sendOrder);
-
-  //When clicked -> send order
-  // -> empty localstorage
-  //-> maybe alert box?
-  // cart.classList.add("hidden");
-  // bgPopup.classList.add("hidden");
+  if (sendOrder.status === 201) {
+    alert("Order skickad!");
+    //Empty localstorage
+    localStorage.setItem("cart", JSON.stringify([]));
+    productsContainer.innerHTML = "";
+    createProduct();
+    cart.classList.add("hidden");
+    bgPopup.classList.add("hidden");
+  }
 });
 
 //Cancel cart
