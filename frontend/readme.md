@@ -1,4 +1,7 @@
-Placera din frontend-kod i denna mapp.
-Dokumentera tydligt om det är några speciella instruktioner för att starta projektet.
+För att starta projektet i frontend:
 
-http://localhost:5173/
+- Skriv i terminalen "npm run dev".
+
+(ja, samma som backend)
+
+Nodemon startas då.
