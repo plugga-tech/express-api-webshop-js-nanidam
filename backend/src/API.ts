@@ -55,7 +55,7 @@ export class API {
       });
   }
 
-  addProduct(req: Request, res: Response) {
+  addProduct(req: Request) {
     const newProduct: IProduct = {
       name: req.body.name,
       description: req.body.description,
@@ -67,20 +67,9 @@ export class API {
 
     req.app.locals["productsDB"].collection("products").insertOne(newProduct);
 
-    if (newProduct) {
-      res.status(201).json(newProduct);
-    } else {
-      res.status(406).json("Product not added");
-    }
-
     //add many products
     // const newProducts: IProduct[] = req.body;
     // req.app.locals["productsDB"].collection("products").insertMany(newProducts);
-    // if (newProducts) {
-    //   res.status(201).json(newProducts);
-    // } else {
-    //   res.status(406).json("Products not added");
-    // }
   }
 
   addOrder(req: Request, res: Response) {

@@ -36,7 +36,7 @@ router.get("/", (req, res) => {
 // Create product
 router.post("/add", function (req: Request, res: Response) {
   if (req.body.token === "1234key1234") {
-    api.addProduct(req, res);
+    api.addProduct(req);
     res.status(201).json("Token accepted - product added");
   } else {
     res.status(406).json("Something went wrong. Product not added");
@@ -47,17 +47,13 @@ router.post("/add", function (req: Request, res: Response) {
 router.get("/category", function (req: Request, res: Response) {
   const productCategory = req.body.category;
 
-  if (productCategory < 5 || productCategory > 1) {
-    req.app.locals["productsDB"]
-      .collection("products")
-      .find({ category: productCategory })
-      .toArray()
-      .then((result: IProduct[]) => {
-        res.status(200).json(result);
-      });
-  } else {
-    res.status(401).json("Category not found");
-  }
+  req.app.locals["productsDB"]
+    .collection("products")
+    .find({ category: productCategory })
+    .toArray()
+    .then((result: IProduct[]) => {
+      res.status(200).json(result);
+    });
 });
 
 export default router;
