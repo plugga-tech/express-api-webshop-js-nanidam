@@ -1,14 +1,16 @@
 import type { Request, Response } from "express";
 import type { IOrder, IProduct, IUser } from "./models/interfaces";
-import crypto from "crypto-js";
 
-const SECRETKEY = "testFrudd";
+import crypto from "crypto-js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export class API {
   addUser(req: Request, res: Response) {
     const savedPassword = crypto.AES.encrypt(
       req.body.password,
-      SECRETKEY
+      process.env["SECRETKEY"]!
     ).toString();
 
     const newUser = {
@@ -41,7 +43,7 @@ export class API {
         if (foundUser) {
           const decryptedUserPassword = crypto.AES.decrypt(
             foundUser.password,
-            SECRETKEY
+            process.env["SECRETKEY"]!
           ).toString(crypto.enc.Utf8);
 
           if (password === decryptedUserPassword) {
