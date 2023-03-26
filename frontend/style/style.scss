@@ -109,6 +109,9 @@
     text-align: center;
     z-index: 10;
     position: relative;
+    .cart-title{
+        color: $purple;
+    }
   
     .cart-container {
       background-color: white;

@@ -443,6 +443,9 @@ template {
   z-index: 10;
   position: relative;
 }
+.cart .cart-title {
+  color: #5836d0;
+}
 .cart .cart-container {
   background-color: white;
   width: 92%;
