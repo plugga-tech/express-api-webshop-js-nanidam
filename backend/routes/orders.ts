@@ -31,10 +31,11 @@ router.post("/user", function (req: Request, res: Response) {
   if (req.body.token === process.env["TOKEN"]) {
     req.app.locals["ordersDB"]
       .collection("orders")
-      .findOne({ user: req.body.user })
-      .then((foundOrder: IOrder) => {
-        if (foundOrder) {
-          res.status(200).json(foundOrder);
+      .find({ user: req.body.user })
+      .toArray()
+      .then((orders: IOrder[]) => {
+        if (orders.length > 0) {
+          res.status(200).json(orders);
         } else {
           res.status(404).json("Orders not found.");
         }
