@@ -79,9 +79,6 @@ const initProduct = await axios(configProduct);
 // console.log(initProduct.data[0]);
 
 const productsContainer = document.querySelector(".products") as HTMLElement;
-const productCounter = document.querySelectorAll(
-  ".product-count"
-) as NodeListOf<HTMLSpanElement>;
 
 const createProduct = () => {
   const localStorageCart = JSON.parse(initCart!);
@@ -181,11 +178,15 @@ addProductBtns.forEach((btn: HTMLButtonElement) => {
     const stringifyCount = String(addCount);
 
     productCount.innerHTML = stringifyCount;
+    const foundProduct: { name: string; _id: string } = initProduct.data.find(
+      (prod: { name: string }) => prod.name === productName
+    );
 
     const product = {
       name: productName,
       count: addCount,
       price: productPrice,
+      id: foundProduct._id,
     };
 
     const currentCart = JSON.parse(localStorage.getItem("cart") || "[]");
@@ -202,7 +203,6 @@ addProductBtns.forEach((btn: HTMLButtonElement) => {
     }
 
     localStorage.setItem("cart", JSON.stringify(newCart));
-    console.log(newCart);
   });
 });
 
@@ -220,10 +220,14 @@ subtractProductBtns.forEach((btn: HTMLButtonElement) => {
       const stringifyCount = String(subtractCount);
       productCount.innerHTML = stringifyCount;
 
+      const foundProduct: { name: string; _id: string } = initProduct.data.find(
+        (prod: { name: string }) => prod.name === productName
+      );
       const product = {
         name: productName,
         count: subtractCount,
         price: productPrice,
+        id: foundProduct._id,
       };
 
       const currentCart = JSON.parse(localStorage.getItem("cart") || "[]");
@@ -243,7 +247,6 @@ subtractProductBtns.forEach((btn: HTMLButtonElement) => {
       }
 
       localStorage.setItem("cart", JSON.stringify(newCart));
-      console.log(newCart);
     }
   });
 });
