@@ -22,6 +22,7 @@ type productOrder = {
 export interface IOrder {
   user: string;
   products: productOrder[];
+  token: string | undefined;
 }
 
 export interface ICategory {
