@@ -1,5 +1,5 @@
 import axios from "axios";
-import { IProduct } from "./models/interfaces";
+import { IProduct, IProductListItem } from "./models/interfaces";
 
 const loggedinUsername = document.querySelector(
   ".logged-in-username"
@@ -155,6 +155,8 @@ const renderCart = (cart: any) => {
   );
 
   cartTotalSum.textContent = totalSum;
+
+  console.log(cart);
 };
 
 //Cart total price
@@ -321,6 +323,51 @@ cartIcon.addEventListener("click", () => {
   bgPopup.classList.remove("hidden");
   const currentCart = JSON.parse(localStorage.getItem("cart") || "[]");
   renderCart(currentCart);
+});
+
+//Send order
+cartSendBtn.addEventListener("click", async () => {
+  console.log("Send clicked");
+  const foundLoggedinUser = JSON.parse(
+    localStorage.getItem("loggedInUser") || ""
+  );
+
+  console.log(foundLoggedinUser.id);
+
+  const currentCart = JSON.parse(localStorage.getItem("cart") || "[]");
+
+  const productList: IProductListItem[] = [];
+
+  if (currentCart.length) {
+    currentCart.forEach(
+      (product: { name: string; count: number; price: string; id: string }) => {
+        productList.push({ productId: product.id, quantity: product.count });
+      }
+    );
+  }
+
+  console.log(productList);
+
+  const configOrders = {
+    headers: {
+      "Content-type": "application/json",
+    },
+    method: "POST",
+    url: "http://localhost:3000/api/orders/add",
+    data: {
+      user: foundLoggedinUser.id,
+      products: productList,
+    },
+  };
+
+  const sendOrder = await axios(configOrders);
+  console.log(sendOrder);
+
+  //When clicked -> send order
+  // -> empty localstorage
+  //-> maybe alert box?
+  // cart.classList.add("hidden");
+  // bgPopup.classList.add("hidden");
 });
 
 //Cancel cart

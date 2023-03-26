@@ -6,3 +6,8 @@ export interface IProduct {
   category: number;
   token: string | undefined;
 }
+
+export interface IProductListItem {
+  productId: string;
+  quantity: number;
+}
