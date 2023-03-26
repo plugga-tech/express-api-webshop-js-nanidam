@@ -450,16 +450,16 @@ template {
   overflow: scroll;
 }
 .cart .cart-container .cart-product {
-  display: flex; /* added property */
-  align-items: center; /* added property */
-  justify-content: space-between; /* added property */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 .cart .cart-container .cart-product .cart-counter {
-  display: flex; /* added property */
-  align-items: center; /* added property */
+  display: flex;
+  align-items: center;
 }
 .cart .cart-container .cart-product .cart-counter button {
-  margin: 0 0.5rem; /* added property */
+  margin: 0 0.5rem;
   font-weight: bold;
 }
 .cart .cart-container .cart-product .cart-counter p {
