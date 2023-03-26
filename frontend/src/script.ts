@@ -1,4 +1,5 @@
 import axios from "axios";
+import { IProduct } from "./models/interfaces";
 
 const loginIcon = document.getElementById("login-icon") as HTMLElement;
 const cartIcon = document.getElementById("cart-icon") as HTMLElement;
@@ -18,6 +19,15 @@ const registerPage = document.querySelector(".register-page") as HTMLDivElement;
 const registerUserBtn = document.querySelector(
   ".register-user-btn"
 ) as HTMLButtonElement;
+const inputRegisterUsername = document.getElementById(
+  "register-username"
+) as HTMLInputElement;
+const inputRegisterUserMail = document.getElementById(
+  "register-user-email"
+) as HTMLInputElement;
+const inputRegisterUserPassword = document.getElementById(
+  "register-user-password"
+) as HTMLInputElement;
 
 //Cart variables
 const cart = document.querySelector(".cart") as HTMLDivElement;
@@ -45,7 +55,7 @@ const productPrice = document.querySelector(
 ) as HTMLParagraphElement;
 
 // get all products
-const productConfig = {
+const configProduct = {
   headers: {
     "Content-type": "application/json",
   },
@@ -53,17 +63,9 @@ const productConfig = {
   url: "http://localhost:3000/api/products",
 };
 
-const initProduct = await axios(productConfig);
-console.log(initProduct.data);
+const initProduct = await axios(configProduct);
+// console.log(initProduct.data[0]);
 
-interface IProduct {
-  name: string;
-  description: string;
-  price: number;
-  lager: number;
-  category: number;
-  token: string | undefined;
-}
 const createProduct = () => {
   initProduct.data.forEach((product: IProduct) => {
     productsContainer.innerHTML += `
@@ -91,9 +93,9 @@ loginIcon.addEventListener("click", () => {
   bgPopup.classList.remove("hidden");
 });
 
+//Open register
 registerUser.addEventListener("click", () => {
   registerPage.classList.remove("hidden");
-  loginPage.classList.add("hidden");
 });
 
 //Login btn
@@ -103,9 +105,30 @@ loginUser.addEventListener("click", () => {
 });
 
 //Register user
-registerUserBtn.addEventListener("click", () => {
+registerUserBtn.addEventListener("click", async () => {
   registerPage.classList.add("hidden");
   bgPopup.classList.add("hidden");
+
+  //post registered user
+  const configRegisterUser = {
+    method: "POST",
+    url: "http://localhost:3000/api/users/add",
+    headers: {
+      "Content-type": "application/json",
+    },
+    data: {
+      name: inputRegisterUsername.value,
+      password: inputRegisterUserPassword.value,
+      email: inputRegisterUserMail.value,
+    },
+  };
+
+  const registeredUser = await axios(configRegisterUser);
+
+  if (registeredUser.status === 201) {
+    registerPage.classList.add("hidden");
+    bgPopup.classList.add("hidden");
+  }
 });
 
 //Open cart
