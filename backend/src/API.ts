@@ -20,39 +20,35 @@ export class API {
     req.app.locals["usersDB"].collection("users").insertOne(newUser);
 
     if (newUser) {
-      res.status(201).json(newUser);
+      res.status(201).json({ name: newUser.name, email: newUser.email });
     } else {
       res.send(404).json("User not added.");
     }
   }
 
   logInUser(req: Request, res: Response) {
-    const { email } = req.body;
+    const { email, password } = req.body;
 
     req.app.locals["usersDB"]
       .collection("users")
       .find()
       .toArray()
-      .then((users: IUser[]) => {
+      .then((users: any) => {
         const foundUser: IUser | undefined = users.find(
           (user: IUser) => user.email === email
         );
 
-        //when user's password matches with password in inputfield -> send back foundUser to frontend
-        if (
-          foundUser &&
-          foundUser.password ===
-            crypto.AES.decrypt(foundUser.password, SECRETKEY).toString(
-              crypto.enc.Utf8
-            )
-        ) {
-          res.status(200).json({
-            _id: foundUser._id,
-            name: foundUser.name,
-            email: foundUser.email,
-          });
-        } else {
-          res.status(401).json("Wrong e-mail or password");
+        if (foundUser) {
+          const decryptedUserPassword = crypto.AES.decrypt(
+            foundUser.password,
+            SECRETKEY
+          ).toString(crypto.enc.Utf8);
+
+          if (password === decryptedUserPassword) {
+            res.status(202).json(`Welcome ${foundUser.name}`);
+          } else {
+            res.status(401).json("Wrong mail or password");
+          }
         }
       });
   }

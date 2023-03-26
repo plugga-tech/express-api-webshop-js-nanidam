@@ -34,9 +34,14 @@ Content-Type: application/json
 POST http://localhost:3000/api/users/login
 Content-Type: application/json
 
+# {
+#   "email": "// EN USER EMAIL",
+#   "password": "// EN USER EMAIL"
+# }
+
 {
-  "email": "// EN USER EMAIL",
-  "password": "// EN USER EMAIL"
+  "email": "test@mail.com",
+  "password": "test"
 }
 
 ###

@@ -41,7 +41,7 @@ router.post("/", (req, res) => {
 // add a user
 router.post("/add", (req: Request, res: Response) => {
   api.addUser(req, res);
-  res.send(`User ${req.body.name} added!`);
+  res.send(`User added!`);
 });
 
 // when existing user logs in
