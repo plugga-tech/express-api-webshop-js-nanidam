@@ -367,6 +367,7 @@ template {
   display: inline-block;
   margin-right: 10px;
   color: #5836d0;
+  cursor: pointer;
 }
 
 .login-page,
@@ -470,6 +471,7 @@ template {
   width: 32px;
   height: 32px;
   border-radius: 50%;
+  cursor: pointer;
 }
 .products .product .product-info {
   display: flex;
