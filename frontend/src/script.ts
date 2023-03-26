@@ -1,5 +1,6 @@
 const loginIcon = document.getElementById("login-icon") as HTMLElement;
 const cartIcon = document.getElementById("cart-icon") as HTMLElement;
+const bgPopup = document.querySelector(".bg-popup") as HTMLDivElement;
 
 //Login variables
 const loginPage = document.querySelector(".login-page") as HTMLDivElement;
@@ -24,8 +25,6 @@ const cartCancelBtn = document.querySelector(
 const cartSendBtn = document.querySelector(
   ".cart-send-btn"
 ) as HTMLButtonElement;
-
-const bgPopup = document.querySelector(".bg-popup") as HTMLDivElement;
 
 //Open login for user
 loginIcon.addEventListener("click", () => {
