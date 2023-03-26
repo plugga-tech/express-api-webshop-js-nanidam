@@ -47,21 +47,21 @@ const cartSendBtn = document.querySelector(
   ".cart-send-btn"
 ) as HTMLButtonElement;
 
-//Products
-const productsContainer = document.querySelector(".products") as HTMLElement;
-const productImg = document.querySelector(".product-img") as HTMLImageElement;
-const subtractProductBtn = document.querySelector(
-  ".product-decrease-btn"
-) as HTMLImageElement;
-const addProductBtn = document.querySelector(
-  ".product-increase-btn"
-) as HTMLImageElement;
-const productName = document.querySelector(
-  ".product-name"
-) as HTMLParagraphElement;
-const productPrice = document.querySelector(
-  ".product-price"
-) as HTMLParagraphElement;
+// //Products
+// const productsContainer = document.querySelector(".products") as HTMLElement;
+// const productImg = document.querySelector(".product-img") as HTMLImageElement;
+// const subtractProductBtns = document.querySelectorAll(
+//   ".product-decrease-btn"
+// ) as NodeListOf<Element>;
+// const addProductBtns = document.querySelectorAll(
+//   ".product-increase-btn"
+// ) as NodeListOf<HTMLButtonElement>;
+// const productName = document.querySelector(
+//   ".product-name"
+// ) as HTMLParagraphElement;
+// const productPrice = document.querySelector(
+//   ".product-price"
+// ) as HTMLParagraphElement;
 
 // get all products
 const configProduct = {
@@ -74,6 +74,8 @@ const configProduct = {
 
 const initProduct = await axios(configProduct);
 // console.log(initProduct.data[0]);
+
+const productsContainer = document.querySelector(".products") as HTMLElement;
 
 const createProduct = () => {
   initProduct.data.forEach((product: IProduct) => {
@@ -95,6 +97,31 @@ const createProduct = () => {
 };
 
 createProduct();
+
+//Products
+const productImg = document.querySelector(".product-img") as HTMLImageElement;
+const subtractProductBtns = document.querySelectorAll(
+  ".product-decrease-btn"
+) as NodeListOf<Element>;
+const addProductBtns = document.querySelectorAll(
+  ".product-increase-btn"
+) as NodeListOf<HTMLButtonElement>;
+const productName = document.querySelector(
+  ".product-name"
+) as HTMLParagraphElement;
+const productPrice = document.querySelector(
+  ".product-price"
+) as HTMLParagraphElement;
+
+//Add product btn
+addProductBtns.forEach((btn: HTMLButtonElement) => {
+  btn.addEventListener("click", (e: MouseEvent) => {
+    console.log(
+      (e.currentTarget as HTMLElement).parentElement?.nextElementSibling
+        ?.childNodes[1].childNodes[0].childNodes[0]
+    );
+  });
+});
 
 //Open login for user
 loginIcon.addEventListener("click", () => {
