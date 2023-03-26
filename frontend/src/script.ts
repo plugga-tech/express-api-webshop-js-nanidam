@@ -1,6 +1,9 @@
 import axios from "axios";
 import { IProduct } from "./models/interfaces";
 
+const loggedinUsername = document.querySelector(
+  ".logged-in-username"
+) as HTMLParagraphElement;
 const loginIcon = document.getElementById("login-icon") as HTMLElement;
 const cartIcon = document.getElementById("cart-icon") as HTMLElement;
 const bgPopup = document.querySelector(".bg-popup") as HTMLDivElement;
@@ -10,6 +13,12 @@ const loginPage = document.querySelector(".login-page") as HTMLDivElement;
 const loginUser = document.querySelector(
   ".login-user-btn"
 ) as HTMLButtonElement;
+const inputLoginUserMail = document.getElementById(
+  "user-email"
+) as HTMLInputElement;
+const inputLoginUserPassword = document.getElementById(
+  "user-password"
+) as HTMLInputElement;
 
 //Register variables
 const registerUser = document.querySelector(
@@ -99,9 +108,28 @@ registerUser.addEventListener("click", () => {
 });
 
 //Login btn
-loginUser.addEventListener("click", () => {
-  loginPage.classList.add("hidden");
-  bgPopup.classList.add("hidden");
+loginUser.addEventListener("click", async () => {
+  // loginPage.classList.add("hidden");
+  // bgPopup.classList.add("hidden");
+
+  const configLoginUser = {
+    method: "POST",
+    url: "http://localhost:3000/api/users/login",
+    headers: {
+      "Content-type": "application/json",
+    },
+    data: {
+      email: inputLoginUserMail.value,
+      password: inputLoginUserPassword.value,
+    },
+  };
+
+  const loginUser = await axios(configLoginUser);
+  if (loginUser.status === 202) {
+    loginPage.classList.add("hidden");
+    bgPopup.classList.add("hidden");
+    loggedinUsername.innerHTML = `${loginUser.data.name}`;
+  }
 });
 
 //Register user
