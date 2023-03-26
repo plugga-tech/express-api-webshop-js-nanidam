@@ -8,6 +8,7 @@ dotenv.config();
 const router = express.Router();
 const api = new API();
 
+// Get all categories
 router.get("/", function (req: Request, res: Response) {
   req.app.locals["categoriesDB"]
     .collection("categories")
@@ -23,12 +24,10 @@ router.get("/", function (req: Request, res: Response) {
     });
 });
 
+// Create category. Must have TOKEN-key
 router.post("/add", function (req: Request, res: Response) {
   if (req.body.token === process.env["TOKEN"]!) {
     api.addCategory(req, res);
-    res.status(201).json("Token accepted - product added");
-  } else {
-    res.status(406).json("Something went wrong. Category not created");
   }
 });
 

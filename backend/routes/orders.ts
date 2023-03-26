@@ -5,10 +5,7 @@ import type { IOrder } from "../src/models/interfaces.js";
 const router = express.Router();
 const api = new API();
 
-router.post("/add", function (req: Request, res: Response) {
-  api.addOrder(req, res);
-});
-
+//Get all orders. Must have TOKEN-key
 router.get("/all", function (req: Request, res: Response) {
   if (req.body.token === process.env["TOKEN"]!) {
     req.app.locals["ordersDB"]
@@ -24,7 +21,15 @@ router.get("/all", function (req: Request, res: Response) {
   }
 });
 
+//Create order for specific user
+router.post("/add", function (req: Request, res: Response) {
+  api.addOrder(req, res);
+});
+
+//Get order for specific user. Must have TOKEN-key
 router.post("/user", function (req: Request, res: Response) {
+  console.log(req.body.token);
+
   req.app.locals["ordersDB"]
     .collection("orders")
     .findOne({ user: req.body.user })

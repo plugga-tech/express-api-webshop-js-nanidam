@@ -47,7 +47,7 @@ export class API {
           ).toString(crypto.enc.Utf8);
 
           if (password === decryptedUserPassword) {
-            res.status(202).json(`Welcome ${foundUser.name}`);
+            res.status(202).json({ name: foundUser.name, id: foundUser._id });
           } else {
             res.status(401).json("Wrong mail or password");
           }
@@ -80,7 +80,7 @@ export class API {
     if (newOrder) {
       res.status(201).json(newOrder);
     } else {
-      res.status(406).json("Order not added");
+      res.status(406).json("Order not added.");
     }
   }
 
@@ -89,8 +89,6 @@ export class API {
       name: req.body.name,
       token: req.body.token,
     };
-
-    console.log(newCategory);
 
     if (newCategory.token) {
       req.app.locals["categoriesDB"]
