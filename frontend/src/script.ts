@@ -387,7 +387,7 @@ cartCancelBtn.addEventListener("click", () => {
 //Order = heart-icon
 orderIcon.addEventListener("click", async () => {
   order.classList.remove("hidden");
-
+  bgPopup.classList.remove("hidden");
   const foundLoggedinUser = JSON.parse(
     localStorage.getItem("loggedInUser") || "[]"
   );
@@ -412,12 +412,20 @@ orderIcon.addEventListener("click", async () => {
   const seeOrders = await axios(configOrder);
   // console.log(seeOrders.data);
 
-  const frudd = seeOrders.data;
-  frudd.forEach((order: any) => {
+  const userOrders = seeOrders.data;
+
+  userOrders.forEach((order: any) => {
+    console.log(order.products);
     orderContainer.innerHTML += `
-      <p>${order._id}</p>
+      <p>Order-ID: ${order._id}</p>
       <ul>
-          <li>ProduktID: ${order.products._id}, Antal: ${order.products.quantity}</li>
+        ${order.products
+          .map(
+            (product: any) => `
+          <li>Produkt-ID: ${product.productId}<br>Antal: ${product.quantity}</li>
+        `
+          )
+          .join("")}
       </ul>
     `;
   });
@@ -425,4 +433,5 @@ orderIcon.addEventListener("click", async () => {
 
 exitOrderBtn.addEventListener("click", () => {
   order.classList.add("hidden");
+  bgPopup.classList.add("hidden");
 });

@@ -159,10 +159,9 @@
     left: 15%;
     height: 70%;
     width: 60%;
+    overflow: auto;
+    z-index: 20;
   }
-
-
-
 
 //category bar
 .categories-container {
