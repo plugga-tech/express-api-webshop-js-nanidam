@@ -86,7 +86,7 @@ const createProduct = () => {
   initProduct.data.forEach((product: IProduct) => {
     let newCount = 0;
 
-    if (localStorageCart.length) {
+    if (localStorageCart) {
       for (let i = 0; i < localStorageCart.length; i++) {
         const cartItem = localStorageCart[i];
         if (product.name === cartItem.name) {
@@ -171,9 +171,6 @@ addProductBtns.forEach((btn: HTMLButtonElement) => {
       price: productPrice,
     };
 
-    // const currentCart = localStorage.getItem("cart");
-    // const newCart = JSON.parse(currentCart!);
-
     const currentCart = JSON.parse(localStorage.getItem("cart") || "[]");
     const newCart = currentCart.slice();
 
@@ -188,21 +185,7 @@ addProductBtns.forEach((btn: HTMLButtonElement) => {
     }
 
     localStorage.setItem("cart", JSON.stringify(newCart));
-
-    // if(foundProduct){
-    // REMOVE FOUNDPRODUCT FROM NEW CART + ADD NEW PROD IN LOCALSTORAGE
-
-    // } else {
-    //newCart.push(product);
-    // }
     console.log(newCart);
-
-    // localStorage.setItem("cart", JSON.stringify(newCart));
-
-    // console.log(newCart.find(prod =>{
-    //   prod === product
-    // }));
-    // renderCart(productName, addCount, productPrice);
   });
 });
 
@@ -211,11 +194,39 @@ subtractProductBtns.forEach((btn: HTMLButtonElement) => {
     const productCount = (e.currentTarget as HTMLElement).parentElement
       ?.childNodes[3].childNodes[0] as HTMLSpanElement;
     const numbCount = Number(productCount.innerHTML);
+    const getProductName = (e.currentTarget as HTMLElement).parentElement
+      ?.nextElementSibling?.childNodes[1].childNodes[0] as HTMLParagraphElement;
+    const productName = getProductName.innerHTML;
 
     if (numbCount > 0) {
       const subtractCount = numbCount - 1;
       const stringifyCount = String(subtractCount);
       productCount.innerHTML = stringifyCount;
+
+      const product = {
+        name: productName,
+        count: subtractCount,
+        price: productPrice,
+      };
+
+      const currentCart = JSON.parse(localStorage.getItem("cart") || "[]");
+      const newCart = currentCart.slice();
+
+      const productIndex = newCart.findIndex(
+        (prod: any) => prod.name === productName
+      );
+
+      if (productIndex >= 0) {
+        newCart[productIndex].count = subtractCount;
+        if (subtractCount === 0) {
+          newCart.splice(productIndex, 1);
+        }
+      } else {
+        newCart.push(product);
+      }
+
+      localStorage.setItem("cart", JSON.stringify(newCart));
+      console.log(newCart);
     }
   });
 });
