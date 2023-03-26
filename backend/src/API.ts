@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import type { IOrder, IProduct, IUser } from "./models/interfaces";
+import type { ICategory, IOrder, IProduct, IUser } from "./models/interfaces";
 
 import crypto from "crypto-js";
 import dotenv from "dotenv";
@@ -85,12 +85,31 @@ export class API {
 
   addOrder(req: Request, res: Response) {
     const newOrder: IOrder = req.body;
+
     req.app.locals["ordersDB"].collection("orders").insertOne(newOrder);
 
     if (newOrder) {
       res.status(201).json(newOrder);
     } else {
       res.status(406).json("Order not added");
+    }
+  }
+
+  addCategory(req: Request, res: Response) {
+    const newCategory: ICategory = {
+      name: req.body.name,
+      token: req.body.token,
+    };
+
+    console.log(newCategory);
+
+    if (newCategory.token) {
+      req.app.locals["categoriesDB"]
+        .collection("categories")
+        .insertOne(newCategory);
+      res.status(201).json(newCategory);
+    } else {
+      res.status(406).json("Category not added");
     }
   }
 }

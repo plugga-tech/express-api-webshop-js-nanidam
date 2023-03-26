@@ -23,3 +23,8 @@ export interface IOrder {
   user: string;
   products: productOrder[];
 }
+
+export interface ICategory {
+  name: string;
+  token: string | undefined;
+}
