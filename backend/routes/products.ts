@@ -6,25 +6,32 @@ import type { IProduct } from "../src/models/interfaces.js";
 const router = express.Router();
 const api = new API();
 
-// If "id" exist -> show product, otherwise get ALL products
+// Get all products or get specific product with id
 router.get("/", (req, res) => {
-  const DB = req.app.locals["db"].collection("products");
   if (req.body.id) {
-    DB.findOne({ _id: new ObjectId(req.body.id) }).then((result: IProduct) => {
-      if (result) {
-        res.status(200).json(result);
-      } else {
-        res.status(404).json("Product not found");
-      }
-    });
-  } else {
-    DB.find()
+    req.app.locals["db"]
+      .collection("products")
+      .find({ _id: new ObjectId(req.body.id) })
+      .project()
       .toArray()
-      .then((result: IProduct[]) => {
-        if (result) {
-          res.status(200).json(result);
+      .then((results: IProduct) => {
+        if (results) {
+          res.status(200).json(results);
         } else {
           res.status(404).json("Product not found");
+        }
+      });
+  } else {
+    req.app.locals["db"]
+      .collection("products")
+      .find()
+      .project()
+      .toArray()
+      .then((results: IProduct[]) => {
+        if (results) {
+          res.status(200).json(results);
+        } else {
+          res.status(400).json("Products not found");
         }
       });
   }
