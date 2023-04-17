@@ -96,6 +96,7 @@ const configProduct = {
 };
 
 const productsContainer = document.querySelector(".products") as HTMLElement;
+const initProduct = await axios(configProduct);
 
 //Create each products from database
 const createProduct = async () => {
@@ -362,7 +363,6 @@ otherBtn.addEventListener("click", async () => {
 
 // Show all categories
 allCategories.addEventListener("click", async () => {
-  console.log("clicked on header");
   await createProduct();
 });
 
