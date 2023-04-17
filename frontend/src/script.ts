@@ -1,12 +1,6 @@
 import axios from "axios";
 import { IProduct, IProductListItem } from "./models/interfaces";
-
-//Login
-const loggedinUsername = document.querySelector(
-  ".logged-in-username"
-) as HTMLParagraphElement;
-const loginIcon = document.getElementById("login-icon") as HTMLElement;
-const bgPopup = document.querySelector(".bg-popup") as HTMLDivElement;
+import { categories } from "./models/categories";
 
 //Order
 const orderIcon = document.getElementById("favorite-icon") as HTMLElement;
@@ -19,6 +13,11 @@ const exitOrderBtn = document.querySelector(
 const order = document.querySelector(".order") as HTMLDivElement;
 
 //Login variables
+const loggedinUsername = document.querySelector(
+  ".logged-in-username"
+) as HTMLParagraphElement;
+const loginIcon = document.getElementById("login-icon") as HTMLElement;
+const bgPopup = document.querySelector(".bg-popup") as HTMLDivElement;
 const loginPage = document.querySelector(".login-page") as HTMLDivElement;
 const loginUser = document.querySelector(
   ".login-user-btn"
@@ -64,6 +63,16 @@ const cartTotalSum = document.querySelector(
   ".cart-total-sum"
 ) as HTMLParagraphElement;
 
+//Categories
+const topsBtn = document.querySelector("#tops-btn") as HTMLButtonElement;
+const bottomsBtn = document.querySelector("#bottoms-btn") as HTMLButtonElement;
+const shoesBtn = document.querySelector("#shoes-btn") as HTMLButtonElement;
+const accessoriesBtn = document.querySelector(
+  "#accessories-btn"
+) as HTMLButtonElement;
+const otherBtn = document.querySelector("#other-btn") as HTMLButtonElement;
+const allCategories = document.querySelector(".header") as HTMLHeadElement;
+
 //Localstorage for logged in user
 const savedLoginUser = localStorage.getItem("loggedInUser");
 if (savedLoginUser) {
@@ -107,23 +116,253 @@ const createProduct = () => {
     }
 
     productsContainer.innerHTML += `
-    <article class="product">
-              <img class="product-img" src="assets/random-product.jpeg" alt="product info">
-              <div class="product-counter-container">
-                  <button class="product-decrease-btn">-</button>
-                  <p><span class="product-count">${newCount}</span class"product-count"> st</p>
-                  <button class="product-increase-btn">+</button>
-              </div>
-              <div class="product-info">
-                  <p class="product-name"><b>${product.name}</b></p>
-                  <p><span class="product-price">${product.price}</span> kr</p>
-              </div>
-          </article>
+      <article class="product">
+        <img class="product-img" src="assets/random-product.jpeg" alt="product info">
+        <div class="product-counter-container">
+            <button class="product-decrease-btn">-</button>
+            <p><span class="product-count">${newCount}</span class"product-count"> st</p>
+            <button class="product-increase-btn">+</button>
+        </div>
+        <div class="product-info">
+            <p class="product-name"><b>${product.name}</b></p>
+            <p><span class="product-price">${product.price}</span> kr</p>
+        </div>
+      </article>
     `;
   });
 };
 
 createProduct();
+
+// Show tops/överdelar
+topsBtn.addEventListener("click", async () => {
+  const configTopsCategory = {
+    headers: {
+      "Content-type": "application/json",
+    },
+    method: "GET",
+    url: `http://localhost:3000/api/products/category/${categories.top}`,
+  };
+
+  const topsCategory = await axios(configTopsCategory);
+  const initCart = localStorage.getItem("cart");
+  const localStorageCart = JSON.parse(initCart!);
+
+  productsContainer.innerHTML = "";
+  topsCategory.data.forEach((product: IProduct) => {
+    let newCount = 0;
+
+    if (localStorageCart) {
+      for (let i = 0; i < localStorageCart.length; i++) {
+        const cartItem = localStorageCart[i];
+        if (product.name === cartItem.name) {
+          newCount = cartItem.count;
+          break;
+        }
+      }
+    }
+
+    productsContainer.innerHTML += `
+    <article class="product">
+      <img class="product-img" src="assets/random-product.jpeg" alt="product info">
+      <div class="product-counter-container">
+          <button class="product-decrease-btn">-</button>
+          <p><span class="product-count">${newCount}</span class"product-count"> st</p>
+          <button class="product-increase-btn">+</button>
+      </div>
+      <div class="product-info">
+          <p class="product-name"><b>${product.name}</b></p>
+          <p><span class="product-price">${product.price}</span> kr</p>
+      </div>
+    </article>
+    `;
+  });
+});
+
+// Show bottoms/nederdelar
+bottomsBtn.addEventListener("click", async () => {
+  const configTopsCategory = {
+    headers: {
+      "Content-type": "application/json",
+    },
+    method: "GET",
+    url: `http://localhost:3000/api/products/category/${categories.bottom}`,
+  };
+
+  const topsCategory = await axios(configTopsCategory);
+  const initCart = localStorage.getItem("cart");
+  const localStorageCart = JSON.parse(initCart!);
+
+  productsContainer.innerHTML = "";
+  topsCategory.data.forEach((product: IProduct) => {
+    let newCount = 0;
+
+    if (localStorageCart) {
+      for (let i = 0; i < localStorageCart.length; i++) {
+        const cartItem = localStorageCart[i];
+        if (product.name === cartItem.name) {
+          newCount = cartItem.count;
+          break;
+        }
+      }
+    }
+
+    productsContainer.innerHTML += `
+    <article class="product">
+      <img class="product-img" src="assets/random-product.jpeg" alt="product info">
+      <div class="product-counter-container">
+          <button class="product-decrease-btn">-</button>
+          <p><span class="product-count">${newCount}</span class"product-count"> st</p>
+          <button class="product-increase-btn">+</button>
+      </div>
+      <div class="product-info">
+          <p class="product-name"><b>${product.name}</b></p>
+          <p><span class="product-price">${product.price}</span> kr</p>
+      </div>
+    </article>
+    `;
+  });
+});
+
+// Show shoes/skor
+shoesBtn.addEventListener("click", async () => {
+  const configTopsCategory = {
+    headers: {
+      "Content-type": "application/json",
+    },
+    method: "GET",
+    url: `http://localhost:3000/api/products/category/${categories.shoes}`,
+  };
+
+  const topsCategory = await axios(configTopsCategory);
+  const initCart = localStorage.getItem("cart");
+  const localStorageCart = JSON.parse(initCart!);
+
+  productsContainer.innerHTML = "";
+  topsCategory.data.forEach((product: IProduct) => {
+    let newCount = 0;
+
+    if (localStorageCart) {
+      for (let i = 0; i < localStorageCart.length; i++) {
+        const cartItem = localStorageCart[i];
+        if (product.name === cartItem.name) {
+          newCount = cartItem.count;
+          break;
+        }
+      }
+    }
+
+    productsContainer.innerHTML += `
+    <article class="product">
+      <img class="product-img" src="assets/random-product.jpeg" alt="product info">
+      <div class="product-counter-container">
+          <button class="product-decrease-btn">-</button>
+          <p><span class="product-count">${newCount}</span class"product-count"> st</p>
+          <button class="product-increase-btn">+</button>
+      </div>
+      <div class="product-info">
+          <p class="product-name"><b>${product.name}</b></p>
+          <p><span class="product-price">${product.price}</span> kr</p>
+      </div>
+    </article>
+    `;
+  });
+});
+
+// Show accessories/accessoarer
+accessoriesBtn.addEventListener("click", async () => {
+  const configTopsCategory = {
+    headers: {
+      "Content-type": "application/json",
+    },
+    method: "GET",
+    url: `http://localhost:3000/api/products/category/${categories.accessories}`,
+  };
+
+  const topsCategory = await axios(configTopsCategory);
+  const initCart = localStorage.getItem("cart");
+  const localStorageCart = JSON.parse(initCart!);
+
+  productsContainer.innerHTML = "";
+  topsCategory.data.forEach((product: IProduct) => {
+    let newCount = 0;
+
+    if (localStorageCart) {
+      for (let i = 0; i < localStorageCart.length; i++) {
+        const cartItem = localStorageCart[i];
+        if (product.name === cartItem.name) {
+          newCount = cartItem.count;
+          break;
+        }
+      }
+    }
+
+    productsContainer.innerHTML += `
+    <article class="product">
+      <img class="product-img" src="assets/random-product.jpeg" alt="product info">
+      <div class="product-counter-container">
+          <button class="product-decrease-btn">-</button>
+          <p><span class="product-count">${newCount}</span class"product-count"> st</p>
+          <button class="product-increase-btn">+</button>
+      </div>
+      <div class="product-info">
+          <p class="product-name"><b>${product.name}</b></p>
+          <p><span class="product-price">${product.price}</span> kr</p>
+      </div>
+    </article>
+    `;
+  });
+});
+
+// Show other/övrigt
+otherBtn.addEventListener("click", async () => {
+  const configTopsCategory = {
+    headers: {
+      "Content-type": "application/json",
+    },
+    method: "GET",
+    url: `http://localhost:3000/api/products/category/${categories.other}`,
+  };
+
+  const topsCategory = await axios(configTopsCategory);
+  const initCart = localStorage.getItem("cart");
+  const localStorageCart = JSON.parse(initCart!);
+
+  productsContainer.innerHTML = "";
+  topsCategory.data.forEach((product: IProduct) => {
+    let newCount = 0;
+
+    if (localStorageCart) {
+      for (let i = 0; i < localStorageCart.length; i++) {
+        const cartItem = localStorageCart[i];
+        if (product.name === cartItem.name) {
+          newCount = cartItem.count;
+          break;
+        }
+      }
+    }
+
+    productsContainer.innerHTML += `
+    <article class="product">
+      <img class="product-img" src="assets/random-product.jpeg" alt="product info">
+      <div class="product-counter-container">
+          <button class="product-decrease-btn">-</button>
+          <p><span class="product-count">${newCount}</span class"product-count"> st</p>
+          <button class="product-increase-btn">+</button>
+      </div>
+      <div class="product-info">
+          <p class="product-name"><b>${product.name}</b></p>
+          <p><span class="product-price">${product.price}</span> kr</p>
+      </div>
+    </article>
+    `;
+  });
+});
+
+// Show all categories
+allCategories.addEventListener("click", () => {
+  createProduct();
+});
 
 //Products variables. Must be after createproducts
 const productImg = document.querySelector(".product-img") as HTMLImageElement;
