@@ -8,7 +8,7 @@ const api = new API();
 
 // If "id" exist -> show product, otherwise get ALL products
 router.get("/", (req, res) => {
-  const DB = req.app.locals["productsDB"].collection("products");
+  const DB = req.app.locals["db"].collection("products");
   if (req.body.id) {
     DB.findOne({ _id: new ObjectId(req.body.id) }).then((result: IProduct) => {
       if (result) {
@@ -44,7 +44,7 @@ router.post("/add", function (req: Request, res: Response) {
 router.get("/category", function (req: Request, res: Response) {
   const productCategory = req.body.category;
 
-  req.app.locals["productsDB"]
+  req.app.locals["db"]
     .collection("products")
     .find({ category: productCategory })
     .toArray()

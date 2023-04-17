@@ -7,18 +7,22 @@ const api = new API();
 
 //Get all orders. Must have TOKEN-key
 router.get("/all", function (req: Request, res: Response) {
-  if (req.body.token === process.env["TOKEN"]!) {
-    req.app.locals["ordersDB"]
-      .collection("orders")
-      .find()
-      .project()
-      .toArray()
-      .then((results: IOrder[]) => {
+  // if (req.body.token === process.env["TOKEN"]!) {
+  req.app.locals["db"]
+    .collection("orders")
+    .find()
+    .project()
+    .toArray()
+    .then((results: IOrder[]) => {
+      if (results) {
         res.status(200).json(results);
-      });
-  } else {
-    res.status(404).json("Can not get all orders");
-  }
+      } else {
+        res.status(404).json("Can not get all orders");
+      }
+    });
+  // } else {
+  // res.status(404).json("Can not get all orders");
+  // }
 });
 
 //Create order for specific user
@@ -29,7 +33,7 @@ router.post("/add", function (req: Request, res: Response) {
 //Get order for specific user. Must have TOKEN-key
 router.post("/user", function (req: Request, res: Response) {
   if (req.body.token === process.env["TOKEN"]) {
-    req.app.locals["ordersDB"]
+    req.app.locals["db"]
       .collection("orders")
       .find({ user: req.body.user })
       .toArray()

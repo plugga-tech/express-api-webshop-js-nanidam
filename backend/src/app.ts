@@ -16,21 +16,24 @@ MongoClient.connect("mongodb://127.0.0.1:27017", {}).then(
   (client: MongoClient) => {
     console.log("mongoDb is working!");
 
-    //Users
-    const usersDB = client.db("users");
-    app.locals["usersDB"] = usersDB;
+    const db = client.db("nani-dam-API");
+    app.locals["db"] = db;
 
-    //Products
-    const productsDB = client.db("products");
-    app.locals["productsDB"] = productsDB;
+    // //Users
+    // const usersDB = client.db("users");
+    // app.locals["usersDB"] = usersDB;
 
-    //Orders
-    const ordersDB = client.db("orders");
-    app.locals["ordersDB"] = ordersDB;
+    // //Products
+    // const productsDB = client.db("products");
+    // app.locals["productsDB"] = productsDB;
 
-    //Categories
-    const categoriesDB = client.db("categories");
-    app.locals["categoriesDB"] = categoriesDB;
+    // //Orders
+    // const ordersDB = client.db("orders");
+    // app.locals["ordersDB"] = ordersDB;
+
+    // //Categories
+    // const categoriesDB = client.db("categories");
+    // app.locals["categoriesDB"] = categoriesDB;
   }
 );
 

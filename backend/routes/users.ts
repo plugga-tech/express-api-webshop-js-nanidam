@@ -8,7 +8,7 @@ const api = new API();
 
 //get users' id, name and email. NOT password
 router.get("/", (req, res) => {
-  req.app.locals["usersDB"]
+  req.app.locals["db"]
     .collection("users")
     .find()
     .project({ password: false })
@@ -24,7 +24,7 @@ router.get("/", (req, res) => {
 
 //get specific user by id
 router.post("/", (req, res) => {
-  req.app.locals["usersDB"]
+  req.app.locals["db"]
     .collection("users")
     .findOne({ _id: new ObjectId(req.body.id) })
     .then((result: IUser) => {
