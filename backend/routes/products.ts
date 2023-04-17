@@ -28,7 +28,7 @@ router.get("/", (req, res) => {
       .project()
       .toArray()
       .then((results: IProduct[]) => {
-        if (results) {
+        if (results.length > 0) {
           res.status(200).json(results);
         } else {
           res.status(400).json("Products not found");
@@ -56,7 +56,11 @@ router.get("/category", function (req: Request, res: Response) {
     .find({ category: productCategory })
     .toArray()
     .then((result: IProduct[]) => {
-      res.status(200).json(result);
+      if (result.length > 0) {
+        res.status(200).json(result);
+      } else {
+        res.status(400).send("Could not get products of a specific category");
+      }
     });
 });
 
