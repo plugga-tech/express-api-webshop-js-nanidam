@@ -95,12 +95,13 @@ const configProduct = {
   url: "http://localhost:3000/api/products",
 };
 
-const initProduct = await axios(configProduct);
 const productsContainer = document.querySelector(".products") as HTMLElement;
 
 //Create each products from database
-const createProduct = () => {
+const createProduct = async () => {
   const localStorageCart = JSON.parse(initCart!);
+  const initProduct = await axios(configProduct);
+  productsContainer.innerHTML = "";
 
   initProduct.data.forEach((product: IProduct) => {
     let newCount = 0;
@@ -132,7 +133,7 @@ const createProduct = () => {
   });
 };
 
-createProduct();
+await createProduct();
 
 // Show tops/överdelar
 topsBtn.addEventListener("click", async () => {
@@ -360,8 +361,9 @@ otherBtn.addEventListener("click", async () => {
 });
 
 // Show all categories
-allCategories.addEventListener("click", () => {
-  createProduct();
+allCategories.addEventListener("click", async () => {
+  console.log("clicked on header");
+  await createProduct();
 });
 
 //Products variables. Must be after createproducts
