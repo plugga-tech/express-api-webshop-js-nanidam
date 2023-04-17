@@ -3,6 +3,7 @@ import type { ICategory, IOrder, IProduct, IUser } from "./models/interfaces";
 
 import crypto from "crypto-js";
 import dotenv from "dotenv";
+import { ObjectId } from "mongodb";
 
 dotenv.config();
 
@@ -75,7 +76,22 @@ export class API {
   addOrder(req: Request, res: Response) {
     const newOrder: IOrder = req.body;
 
-    req.app.locals["db"].collection("orders").insertOne(newOrder);
+    newOrder.products.forEach((product) => {
+      const id = product?.productId;
+      const quantity = product?.quantity as number;
+
+      // Decrease in quantity in "lager"
+      req.app.locals["db"]
+        .collection("products")
+        .findOneAndUpdate(
+          { _id: new ObjectId(id) },
+          { $inc: { lager: -quantity } },
+          { returnOriginal: false }
+        )
+        .then((result: any) => {
+          console.log(result);
+        });
+    });
 
     if (newOrder) {
       res.status(201).json(newOrder);
