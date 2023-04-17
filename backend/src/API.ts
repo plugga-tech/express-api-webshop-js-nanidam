@@ -65,7 +65,7 @@ export class API {
       token: req.body.token,
     };
 
-    req.app.locals["productsDB"].collection("products").insertOne(newProduct);
+    req.app.locals["db"].collection("products").insertOne(newProduct);
 
     //add many products
     // const newProducts: IProduct[] = req.body;
@@ -75,7 +75,7 @@ export class API {
   addOrder(req: Request, res: Response) {
     const newOrder: IOrder = req.body;
 
-    req.app.locals["ordersDB"].collection("orders").insertOne(newOrder);
+    req.app.locals["db"].collection("orders").insertOne(newOrder);
 
     if (newOrder) {
       res.status(201).json(newOrder);
@@ -92,9 +92,7 @@ export class API {
 
     //check token
     if (newCategory.token) {
-      req.app.locals["categoriesDB"]
-        .collection("categories")
-        .insertOne(newCategory);
+      req.app.locals["db"].collection("categories").insertOne(newCategory);
       res.status(201).json(newCategory);
     } else {
       res.status(406).json("Category not added");
