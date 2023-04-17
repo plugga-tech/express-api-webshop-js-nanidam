@@ -5,7 +5,7 @@ import type { IOrder } from "../src/models/interfaces.js";
 const router = express.Router();
 const api = new API();
 
-//Get all orders. Must have TOKEN-key
+//Get all orders.
 router.get("/all", function (req: Request, res: Response) {
   // if (req.body.token === process.env["TOKEN"]!) {
   req.app.locals["db"]
