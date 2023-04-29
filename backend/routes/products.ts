@@ -22,7 +22,7 @@ router.get("/", (req, res) => {
     });
 });
 
-// Create product
+// VG: Create product
 router.post("/add", function (req: Request, res: Response) {
   if (req.body.token === "1234key1234") {
     api.addProduct(req);
@@ -31,6 +31,16 @@ router.post("/add", function (req: Request, res: Response) {
     res.status(401).json("Something went wrong. Product not added");
   }
 });
+
+//G: Create product
+// router.post("/add", function (req: Request, res: Response) {
+//   if (req.body) {
+//     api.addProduct(req);
+//     res.status(201).json("Product added");
+//   } else {
+//     res.status(401).json("Something went wrong. Product not added");
+//   }
+// });
 
 //Get all products of a category
 router.get("/category/:id", (req, res) => {

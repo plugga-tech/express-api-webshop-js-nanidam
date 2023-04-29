@@ -22,6 +22,21 @@ router.get("/", (req, res) => {
     });
 });
 
+router.post("/", (req, res) => {
+  req.app.locals["db"]
+    .collection("users")
+    .findOne({ _id: new ObjectId(req.body.id) })
+    .then((result: IUser) => {
+      if (result) {
+        res
+          .status(200)
+          .json({ _id: result._id, name: result.name, email: result.email });
+      } else {
+        res.status(404).json("User not found.");
+      }
+    });
+});
+
 // add a user
 router.post("/add", (req, res) => {
   api.addUser(req, res);

@@ -5,6 +5,7 @@ export interface IUser {
   email: string;
 }
 
+//VG: Create product
 export interface IProduct {
   name: string;
   description: string;
@@ -13,6 +14,14 @@ export interface IProduct {
   category: number;
   token: string | undefined;
 }
+
+//G: Create product
+// export interface IProduct {
+//   name: string;
+//   description: string;
+//   price: number;
+//   lager: number;
+// }
 
 type productOrder = {
   productId: string;

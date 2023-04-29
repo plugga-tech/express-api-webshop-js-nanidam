@@ -57,6 +57,7 @@ export class API {
   }
 
   addProduct(req: Request) {
+    //VG: Create product
     const newProduct: IProduct = {
       name: req.body.name,
       description: req.body.description,
@@ -65,6 +66,14 @@ export class API {
       category: req.body.category,
       token: req.body.token,
     };
+
+    //G: Create product
+    // const newProduct: IProduct = {
+    //   name: req.body.name,
+    //   description: req.body.description,
+    //   price: req.body.price,
+    //   lager: req.body.lager,
+    // };
 
     req.app.locals["db"].collection("products").insertOne(newProduct);
 
