@@ -9,8 +9,7 @@ GET http://localhost:3000/api/users
 ###
 
 // HÄMTA SPECIFIK USER // SKICKA HELA OBJEKTET
-POST http://localhost:3000/api/users/641f9cb4a7ff3bdac41bb106
-
+POST http://localhost:3000/api/users/
 
 ###
 
@@ -73,7 +72,7 @@ Content-Type: application/json
 ###
 
 // HÄMTA ALLA PRODUKTER FÖR EN SPECIFIK KATEGORI
-GET http://localhost:3000/api/products/category/ 
+GET http://localhost:3000/api/products/category/
 
 // ID PÅ EN SPECIFIK KATEGORI
 
