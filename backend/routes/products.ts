@@ -28,7 +28,7 @@ router.post("/add", function (req: Request, res: Response) {
     api.addProduct(req);
     res.status(201).json("Token accepted - product added");
   } else {
-    res.status(406).json("Something went wrong. Product not added");
+    res.status(401).json("Something went wrong. Product not added");
   }
 });
 
