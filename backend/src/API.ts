@@ -93,6 +93,8 @@ export class API {
         });
     });
 
+    req.app.locals["db"].collection("orders").insertOne(newOrder);
+
     if (newOrder) {
       res.status(201).json(newOrder);
     } else {

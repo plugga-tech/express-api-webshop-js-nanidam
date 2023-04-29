@@ -9,7 +9,7 @@ GET http://localhost:3000/api/users
 ###
 
 // HÄMTA SPECIFIK USER // SKICKA HELA OBJEKTET
-POST http://localhost:3000/api/users/
+POST http://localhost:3000/api/users/641f9cb4a7ff3bdac41bb106
 
 
 ###
@@ -52,7 +52,7 @@ GET http://localhost:3000/api/products
 ###
 
 // HÄMTA SPECIFIK PRODUKT
-GET http://localhost:3000/api/products
+GET http://localhost:3000/api/products/
 
 
 ###
@@ -107,6 +107,11 @@ GET http://localhost:3000/api/categories
 // HÄMTA ALLA ORDERS, KEY MÅSTE ANGES FÖR ATT FÅ TILLGÅNG TILL ORDERS
 GET http://localhost:3000/api/orders/all/ 
 // API TOKEN
+# Content-Type: application/json
+
+# {
+#     "token": "1234key1234"
+# }
 
 ###
 
