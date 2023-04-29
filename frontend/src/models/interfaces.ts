@@ -11,3 +11,9 @@ export interface IProductListItem {
   productId: string;
   quantity: number;
 }
+
+export interface ICategory {
+  id: string;
+  name: string;
+  token: string;
+}

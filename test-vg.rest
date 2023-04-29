@@ -79,7 +79,6 @@ Content-Type: application/json
 // HÄMTA ALLA PRODUKTER FÖR EN SPECIFIK KATEGORI
 GET http://localhost:3000/api/products/category/ 
 
-
 // ID PÅ EN SPECIFIK KATEGORI
 
 ###
