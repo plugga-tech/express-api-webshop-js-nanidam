@@ -10,11 +10,7 @@ GET http://localhost:3000/api/users
 
 // HÄMTA SPECIFIK USER // SKICKA HELA OBJEKTET
 POST http://localhost:3000/api/users/
-Content-Type: application/json
 
-{
-  "id": "// ID PÅ EN SPECIFIK USER"
-}
 
 ###
 

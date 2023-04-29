@@ -20,7 +20,7 @@ export class API {
       email: req.body.email,
     };
 
-    req.app.locals["usersDB"].collection("users").insertOne(newUser);
+    req.app.locals["db"].collection("users").insertOne(newUser);
 
     if (newUser) {
       res.status(201).json({ name: newUser.name, email: newUser.email });
@@ -32,7 +32,7 @@ export class API {
   logInUser(req: Request, res: Response) {
     const { email, password } = req.body;
 
-    req.app.locals["usersDB"]
+    req.app.locals["db"]
       .collection("users")
       .find()
       .toArray()

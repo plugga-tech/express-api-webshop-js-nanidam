@@ -22,11 +22,28 @@ router.get("/", (req, res) => {
     });
 });
 
+// add a user
+router.post("/add", (req, res) => {
+  api.addUser(req, res);
+  res.send(`User added!`);
+});
+
+// when existing user logs in
+router.post("/login", (req: Request, res: Response) => {
+  api.logInUser(req, res);
+});
+
+router.get("/test", (req, res: Response) => {
+  api.addUser(req, res);
+  console.log("add");
+  res.send(`User added!`);
+});
+
 //get specific user by id
-router.post("/", (req, res) => {
+router.post("/:id", (req, res) => {
   req.app.locals["db"]
     .collection("users")
-    .findOne({ _id: new ObjectId(req.body.id) })
+    .findOne({ _id: new ObjectId(req.params.id) })
     .then((result: IUser) => {
       if (result) {
         res
@@ -36,17 +53,6 @@ router.post("/", (req, res) => {
         res.status(404).json("User not found.");
       }
     });
-});
-
-// add a user
-router.post("/add", (req: Request, res: Response) => {
-  api.addUser(req, res);
-  res.send(`User added!`);
-});
-
-// when existing user logs in
-router.post("/login", (req: Request, res: Response) => {
-  api.logInUser(req, res);
 });
 
 export default router;

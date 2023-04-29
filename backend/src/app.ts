@@ -1,4 +1,4 @@
-import express, { Application, Request, Response } from "express";
+import express, { Application } from "express";
 import { MongoClient } from "mongodb";
 import usersRouter from "../routes/users.js";
 import productsRouter from "../routes/products.js";
@@ -37,9 +37,9 @@ MongoClient.connect("mongodb://127.0.0.1:27017", {}).then(
   }
 );
 
-app.get("/", (_req: Request, res: Response) => {
-  res.send("Hello World!");
-});
+// app.get("/", (_req: Request, res: Response) => {
+//   res.send("Hello World!");
+// });
 
 app.use(logger("dev"));
 app.use(express.json());

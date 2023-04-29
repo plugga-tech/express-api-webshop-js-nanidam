@@ -22,21 +22,6 @@ router.get("/", (req, res) => {
     });
 });
 
-// Get specific product
-router.get("/:id", (req, res) => {
-  const id = req.params.id;
-  req.app.locals["db"]
-    .collection("products")
-    .findOne({ _id: new ObjectId(id) })
-    .then((results: IProduct) => {
-      if (results) {
-        res.status(200).json(results);
-      } else {
-        res.status(400).json("Could not find product.");
-      }
-    });
-});
-
 // Create product
 router.post("/add", function (req: Request, res: Response) {
   if (req.body.token === "1234key1234") {
@@ -64,20 +49,20 @@ router.get("/category/:id", (req, res) => {
       }
     });
 });
-// router.get("/category", function (req: Request, res: Response) {
-//   const productCategory = req.body.category;
 
-//   req.app.locals["db"]
-//     .collection("products")
-//     .find({ category: productCategory })
-//     .toArray()
-//     .then((result: IProduct[]) => {
-//       if (result.length > 0) {
-//         res.status(200).json(result);
-//       } else {
-//         res.status(400).send("Could not get products of a specific category");
-//       }
-//     });
-// });
+// Get specific product
+router.get("/:id", (req, res) => {
+  const id = req.params.id;
+  req.app.locals["db"]
+    .collection("products")
+    .findOne({ _id: new ObjectId(id) })
+    .then((results: IProduct) => {
+      if (results) {
+        res.status(200).json(results);
+      } else {
+        res.status(400).json("Could not find product.");
+      }
+    });
+});
 
 export default router;
