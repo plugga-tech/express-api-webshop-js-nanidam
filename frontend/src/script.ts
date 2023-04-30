@@ -1,6 +1,5 @@
 import axios from "axios";
 import { ICategory, IProduct, IProductListItem } from "./models/interfaces";
-import { categories } from "./models/categories";
 
 //Order
 const orderIcon = document.getElementById("favorite-icon") as HTMLElement;
@@ -89,6 +88,119 @@ const configProduct = {
 
 const productsContainer = document.querySelector(".products") as HTMLElement;
 const initProduct = await axios(configProduct);
+const categoriesId: ICategory[] = [];
+
+// Add btns => add by one, and send it to cart
+const plusBtn = () => {
+  const addProductBtns = document.querySelectorAll(
+    ".product-increase-btn"
+  ) as NodeListOf<HTMLButtonElement>;
+
+  addProductBtns.forEach((btn: HTMLButtonElement) => {
+    btn.addEventListener("click", (e: MouseEvent) => {
+      const getProductName = (e.currentTarget as HTMLElement).parentElement
+        ?.nextElementSibling?.childNodes[1]
+        .childNodes[0] as HTMLParagraphElement;
+      const productName = getProductName.innerHTML;
+
+      const getProductPrice = (e.currentTarget as HTMLElement).parentElement
+        ?.nextElementSibling?.childNodes[3]
+        .childNodes[0] as HTMLParagraphElement;
+      const productPrice = getProductPrice.innerHTML;
+
+      const productCount = (e.currentTarget as HTMLElement).parentElement
+        ?.childNodes[3].childNodes[0] as HTMLSpanElement;
+
+      const numbCount = Number(productCount.innerHTML);
+      const addCount = numbCount + 1;
+      const stringifyCount = String(addCount);
+
+      productCount.innerHTML = stringifyCount;
+      const foundProduct: { name: string; _id: string } = initProduct.data.find(
+        (prod: { name: string }) => prod.name === productName
+      );
+
+      const product = {
+        name: productName,
+        count: addCount,
+        price: productPrice,
+        id: foundProduct._id,
+      };
+
+      const currentCart = JSON.parse(localStorage.getItem("cart") || "[]");
+      const newCart = currentCart.slice();
+
+      const productIndex = newCart.findIndex(
+        (prod: any) => prod.name === productName
+      );
+
+      //If productindex is more or equal to 0
+      if (productIndex >= 0) {
+        newCart[productIndex].count += 1;
+      } else {
+        newCart.push(product);
+      }
+
+      localStorage.setItem("cart", JSON.stringify(newCart));
+    });
+  });
+};
+
+// Subtract btns => reduce by one, cannot go below 0, and send it to cart
+const minusBtn = () => {
+  const subtractProductBtns = document.querySelectorAll(
+    ".product-decrease-btn"
+  ) as NodeListOf<HTMLButtonElement>;
+
+  subtractProductBtns.forEach((btn: HTMLButtonElement) => {
+    btn.addEventListener("click", (e: MouseEvent) => {
+      const productCount = (e.currentTarget as HTMLElement).parentElement
+        ?.childNodes[3].childNodes[0] as HTMLSpanElement;
+      const numbCount = Number(productCount.innerHTML);
+
+      const getProductName = (e.currentTarget as HTMLElement).parentElement
+        ?.nextElementSibling?.childNodes[1]
+        .childNodes[0] as HTMLParagraphElement;
+      const productName = getProductName.innerHTML;
+
+      if (numbCount > 0) {
+        const subtractCount = numbCount - 1;
+        const stringifyCount = String(subtractCount);
+        productCount.innerHTML = stringifyCount;
+
+        const foundProduct: { name: string; _id: string } =
+          initProduct.data.find(
+            (prod: { name: string }) => prod.name === productName
+          );
+
+        const product = {
+          name: productName,
+          count: subtractCount,
+          price: productPrice,
+          id: foundProduct._id,
+        };
+
+        const currentCart = JSON.parse(localStorage.getItem("cart") || "[]");
+        const newCart = currentCart.slice();
+
+        const productIndex = newCart.findIndex(
+          (prod: any) => prod.name === productName
+        );
+
+        if (productIndex >= 0) {
+          newCart[productIndex].count = subtractCount;
+          if (subtractCount === 0) {
+            newCart.splice(productIndex, 1);
+          }
+        } else {
+          newCart.push(product);
+        }
+
+        localStorage.setItem("cart", JSON.stringify(newCart));
+      }
+    });
+  });
+};
 
 //Create each products from database
 const createProduct = async () => {
@@ -124,6 +236,8 @@ const createProduct = async () => {
       </article>
     `;
   });
+  plusBtn();
+  minusBtn();
 };
 
 await createProduct();
@@ -144,251 +258,96 @@ const printCategories = async () => {
 
   const { data: getCategories } = await axios(configCategories);
 
-  console.log(getCategories);
-
   getCategories.forEach((category: ICategory) => {
     categoriesContainer.innerHTML += `
-       <button id="${category.name}-btn" class="category">${category.name}</button>
-    
+      <button id="${category.name}-btn" class="category">${category.name}</button>
     `;
-  });
-
-  //Categories
-  const topsBtn = document.querySelector("#top-btn") as HTMLButtonElement;
-  const bottomsBtn = document.querySelector("#bottom-btn") as HTMLButtonElement;
-  const shoesBtn = document.querySelector("#shoes-btn") as HTMLButtonElement;
-  const accessoriesBtn = document.querySelector(
-    "#accessories-btn"
-  ) as HTMLButtonElement;
-  const otherBtn = document.querySelector("#other-btn") as HTMLButtonElement;
-
-  // Show tops
-  topsBtn.addEventListener("click", async () => {
-    const configTopsCategory = {
-      headers: {
-        "Content-type": "application/json",
-      },
-      method: "GET",
-      url: `http://localhost:3000/api/products/category/${categories.top}`,
-    };
-
-    const topsCategory = await axios(configTopsCategory);
-    const initCart = localStorage.getItem("cart");
-    const localStorageCart = JSON.parse(initCart!);
-
-    productsContainer.innerHTML = "";
-    topsCategory.data.forEach((product: IProduct) => {
-      let newCount = 0;
-
-      if (localStorageCart) {
-        for (let i = 0; i < localStorageCart.length; i++) {
-          const cartItem = localStorageCart[i];
-          if (product.name === cartItem.name) {
-            newCount = cartItem.count;
-            break;
-          }
-        }
-      }
-
-      productsContainer.innerHTML += `
-      <article class="product">
-        <img class="product-img" src="assets/random-product.jpeg" alt="product info">
-        <div class="product-counter-container">
-            <button class="product-decrease-btn">-</button>
-            <p><span class="product-count">${newCount}</span class"product-count"> st</p>
-            <button class="product-increase-btn">+</button>
-        </div>
-        <div class="product-info">
-            <p class="product-name"><b>${product.name}</b></p>
-            <p><span class="product-price">${product.price}</span> kr</p>
-        </div>
-      </article>
-      `;
-    });
-  });
-
-  // Show bottoms
-  bottomsBtn.addEventListener("click", async () => {
-    const configTopsCategory = {
-      headers: {
-        "Content-type": "application/json",
-      },
-      method: "GET",
-      url: `http://localhost:3000/api/products/category/${categories.bottom}`,
-    };
-
-    const topsCategory = await axios(configTopsCategory);
-    const initCart = localStorage.getItem("cart");
-    const localStorageCart = JSON.parse(initCart!);
-
-    productsContainer.innerHTML = "";
-    topsCategory.data.forEach((product: IProduct) => {
-      let newCount = 0;
-
-      if (localStorageCart) {
-        for (let i = 0; i < localStorageCart.length; i++) {
-          const cartItem = localStorageCart[i];
-          if (product.name === cartItem.name) {
-            newCount = cartItem.count;
-            break;
-          }
-        }
-      }
-
-      productsContainer.innerHTML += `
-      <article class="product">
-        <img class="product-img" src="assets/random-product.jpeg" alt="product info">
-        <div class="product-counter-container">
-            <button class="product-decrease-btn">-</button>
-            <p><span class="product-count">${newCount}</span class"product-count"> st</p>
-            <button class="product-increase-btn">+</button>
-        </div>
-        <div class="product-info">
-            <p class="product-name"><b>${product.name}</b></p>
-            <p><span class="product-price">${product.price}</span> kr</p>
-        </div>
-      </article>
-      `;
-    });
-  });
-
-  // Show shoes/skor
-  shoesBtn.addEventListener("click", async () => {
-    const configTopsCategory = {
-      headers: {
-        "Content-type": "application/json",
-      },
-      method: "GET",
-      url: `http://localhost:3000/api/products/category/${categories.shoes}`,
-    };
-
-    const topsCategory = await axios(configTopsCategory);
-    const initCart = localStorage.getItem("cart");
-    const localStorageCart = JSON.parse(initCart!);
-
-    productsContainer.innerHTML = "";
-    topsCategory.data.forEach((product: IProduct) => {
-      let newCount = 0;
-
-      if (localStorageCart) {
-        for (let i = 0; i < localStorageCart.length; i++) {
-          const cartItem = localStorageCart[i];
-          if (product.name === cartItem.name) {
-            newCount = cartItem.count;
-            break;
-          }
-        }
-      }
-
-      productsContainer.innerHTML += `
-    <article class="product">
-      <img class="product-img" src="assets/random-product.jpeg" alt="product info">
-      <div class="product-counter-container">
-          <button class="product-decrease-btn">-</button>
-          <p><span class="product-count">${newCount}</span class"product-count"> st</p>
-          <button class="product-increase-btn">+</button>
-      </div>
-      <div class="product-info">
-          <p class="product-name"><b>${product.name}</b></p>
-          <p><span class="product-price">${product.price}</span> kr</p>
-      </div>
-    </article>
-    `;
-    });
-  });
-
-  // Show accessories/accessoarer
-  accessoriesBtn.addEventListener("click", async () => {
-    const configTopsCategory = {
-      headers: {
-        "Content-type": "application/json",
-      },
-      method: "GET",
-      url: `http://localhost:3000/api/products/category/${categories.accessories}`,
-    };
-
-    const topsCategory = await axios(configTopsCategory);
-    const initCart = localStorage.getItem("cart");
-    const localStorageCart = JSON.parse(initCart!);
-
-    productsContainer.innerHTML = "";
-    topsCategory.data.forEach((product: IProduct) => {
-      let newCount = 0;
-
-      if (localStorageCart) {
-        for (let i = 0; i < localStorageCart.length; i++) {
-          const cartItem = localStorageCart[i];
-          if (product.name === cartItem.name) {
-            newCount = cartItem.count;
-            break;
-          }
-        }
-      }
-
-      productsContainer.innerHTML += `
-    <article class="product">
-      <img class="product-img" src="assets/random-product.jpeg" alt="product info">
-      <div class="product-counter-container">
-          <button class="product-decrease-btn">-</button>
-          <p><span class="product-count">${newCount}</span class"product-count"> st</p>
-          <button class="product-increase-btn">+</button>
-      </div>
-      <div class="product-info">
-          <p class="product-name"><b>${product.name}</b></p>
-          <p><span class="product-price">${product.price}</span> kr</p>
-      </div>
-    </article>
-    `;
-    });
-  });
-
-  // Show other/övrigt
-  otherBtn.addEventListener("click", async () => {
-    const configTopsCategory = {
-      headers: {
-        "Content-type": "application/json",
-      },
-      method: "GET",
-      url: `http://localhost:3000/api/products/category/${categories.other}`,
-    };
-
-    const topsCategory = await axios(configTopsCategory);
-    const initCart = localStorage.getItem("cart");
-    const localStorageCart = JSON.parse(initCart!);
-
-    productsContainer.innerHTML = "";
-    topsCategory.data.forEach((product: IProduct) => {
-      let newCount = 0;
-
-      if (localStorageCart) {
-        for (let i = 0; i < localStorageCart.length; i++) {
-          const cartItem = localStorageCart[i];
-          if (product.name === cartItem.name) {
-            newCount = cartItem.count;
-            break;
-          }
-        }
-      }
-
-      productsContainer.innerHTML += `
-    <article class="product">
-      <img class="product-img" src="assets/random-product.jpeg" alt="product info">
-      <div class="product-counter-container">
-          <button class="product-decrease-btn">-</button>
-          <p><span class="product-count">${newCount}</span class"product-count"> st</p>
-          <button class="product-increase-btn">+</button>
-      </div>
-      <div class="product-info">
-          <p class="product-name"><b>${product.name}</b></p>
-          <p><span class="product-price">${product.price}</span> kr</p>
-      </div>
-    </article>
-    `;
-    });
   });
 };
 
 await printCategories();
+
+const getCategoriesId = async () => {
+  const categoriesIdConfig = {
+    headers: {
+      "Content-type": "application/json",
+    },
+    method: "GET",
+    url: `http://localhost:3000/api/categories/`,
+  };
+
+  const allCategories = await axios(categoriesIdConfig);
+  const allCategoriesData = allCategories.data;
+  allCategoriesData.forEach((category: ICategory) => {
+    categoriesId.push(category);
+  });
+};
+
+const productsCategory = async () => {
+  getCategoriesId();
+
+  const allCategories = document.querySelectorAll(
+    ".category"
+  ) as NodeListOf<HTMLButtonElement>;
+
+  allCategories.forEach((categoryBtn: HTMLButtonElement) => {
+    categoryBtn.addEventListener("click", async (e: MouseEvent) => {
+      const categoryText = (e.target as HTMLElement).innerHTML;
+
+      const category = categoriesId.find(
+        (cat) => cat.name === (categoryText as string)
+      );
+
+      const configCategory = {
+        headers: {
+          "Content-type": "application/json",
+        },
+        method: "GET",
+        url: category
+          ? `http://localhost:3000/api/products/category/${category._id}`
+          : "",
+      };
+
+      const productCategory = await axios(configCategory);
+      const initCart = localStorage.getItem("cart");
+      const localStorageCart = JSON.parse(initCart!);
+
+      productsContainer.innerHTML = "";
+      productCategory.data.forEach((product: IProduct) => {
+        let newCount = 0;
+
+        if (localStorageCart) {
+          for (let i = 0; i < localStorageCart.length; i++) {
+            const cartItem = localStorageCart[i];
+            if (product.name === cartItem.name) {
+              newCount = cartItem.count;
+              break;
+            }
+          }
+        }
+
+        productsContainer.innerHTML += `
+          <article class="product">
+            <img class="product-img" src="assets/random-product.jpeg" alt="product info">
+            <div class="product-counter-container">
+                <button class="product-decrease-btn">-</button>
+                <p><span class="product-count">${newCount}</span class"product-count"> st</p>
+                <button class="product-increase-btn">+</button>
+            </div>
+            <div class="product-info">
+                <p class="product-name"><b>${product.name}</b></p>
+                <p><span class="product-price">${product.price}</span> kr</p>
+            </div>
+          </article>
+          `;
+      });
+      plusBtn();
+      minusBtn();
+    });
+  });
+};
+
+productsCategory();
 
 // Show all categories
 allCategories.addEventListener("click", async () => {
@@ -396,16 +355,10 @@ allCategories.addEventListener("click", async () => {
 });
 
 //Products variables. Must be after createproducts
-const productImg = document.querySelector(".product-img") as HTMLImageElement;
-const subtractProductBtns = document.querySelectorAll(
-  ".product-decrease-btn"
-) as NodeListOf<HTMLButtonElement>;
-const addProductBtns = document.querySelectorAll(
-  ".product-increase-btn"
-) as NodeListOf<HTMLButtonElement>;
-const productName = document.querySelector(
-  ".product-name"
-) as HTMLParagraphElement;
+// const productImg = document.querySelector(".product-img") as HTMLImageElement;
+// const productName = document.querySelector(
+//   ".product-name"
+// ) as HTMLParagraphElement;
 const productPrice = document.querySelector(
   ".product-price"
 ) as HTMLParagraphElement;
@@ -437,101 +390,6 @@ const renderCart = (cart: any) => {
 
   cartTotalSum.textContent = totalSum;
 };
-
-//Add product btn
-addProductBtns.forEach((btn: HTMLButtonElement) => {
-  btn.addEventListener("click", (e: MouseEvent) => {
-    const getProductName = (e.currentTarget as HTMLElement).parentElement
-      ?.nextElementSibling?.childNodes[1].childNodes[0] as HTMLParagraphElement;
-    const productName = getProductName.innerHTML;
-
-    const getProductPrice = (e.currentTarget as HTMLElement).parentElement
-      ?.nextElementSibling?.childNodes[3].childNodes[0] as HTMLParagraphElement;
-    const productPrice = getProductPrice.innerHTML;
-
-    const productCount = (e.currentTarget as HTMLElement).parentElement
-      ?.childNodes[3].childNodes[0] as HTMLSpanElement;
-
-    const numbCount = Number(productCount.innerHTML);
-    const addCount = numbCount + 1;
-    const stringifyCount = String(addCount);
-
-    productCount.innerHTML = stringifyCount;
-    const foundProduct: { name: string; _id: string } = initProduct.data.find(
-      (prod: { name: string }) => prod.name === productName
-    );
-
-    const product = {
-      name: productName,
-      count: addCount,
-      price: productPrice,
-      id: foundProduct._id,
-    };
-
-    const currentCart = JSON.parse(localStorage.getItem("cart") || "[]");
-    const newCart = currentCart.slice();
-
-    const productIndex = newCart.findIndex(
-      (prod: any) => prod.name === productName
-    );
-
-    //If productindex is more or equal to 0
-    if (productIndex >= 0) {
-      newCart[productIndex].count += 1;
-    } else {
-      newCart.push(product);
-    }
-
-    localStorage.setItem("cart", JSON.stringify(newCart));
-  });
-});
-
-subtractProductBtns.forEach((btn: HTMLButtonElement) => {
-  btn.addEventListener("click", (e: MouseEvent) => {
-    const productCount = (e.currentTarget as HTMLElement).parentElement
-      ?.childNodes[3].childNodes[0] as HTMLSpanElement;
-    const numbCount = Number(productCount.innerHTML);
-
-    const getProductName = (e.currentTarget as HTMLElement).parentElement
-      ?.nextElementSibling?.childNodes[1].childNodes[0] as HTMLParagraphElement;
-    const productName = getProductName.innerHTML;
-
-    if (numbCount > 0) {
-      const subtractCount = numbCount - 1;
-      const stringifyCount = String(subtractCount);
-      productCount.innerHTML = stringifyCount;
-
-      const foundProduct: { name: string; _id: string } = initProduct.data.find(
-        (prod: { name: string }) => prod.name === productName
-      );
-
-      const product = {
-        name: productName,
-        count: subtractCount,
-        price: productPrice,
-        id: foundProduct._id,
-      };
-
-      const currentCart = JSON.parse(localStorage.getItem("cart") || "[]");
-      const newCart = currentCart.slice();
-
-      const productIndex = newCart.findIndex(
-        (prod: any) => prod.name === productName
-      );
-
-      if (productIndex >= 0) {
-        newCart[productIndex].count = subtractCount;
-        if (subtractCount === 0) {
-          newCart.splice(productIndex, 1);
-        }
-      } else {
-        newCart.push(product);
-      }
-
-      localStorage.setItem("cart", JSON.stringify(newCart));
-    }
-  });
-});
 
 //Open login for user
 loginIcon.addEventListener("click", () => {
