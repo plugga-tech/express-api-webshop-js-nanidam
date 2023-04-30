@@ -236,6 +236,7 @@ const getCategoriesId = async () => {
   });
 };
 
+// render products in each category
 const productsCategory = async () => {
   getCategoriesId();
 
