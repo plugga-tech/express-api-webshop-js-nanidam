@@ -47,6 +47,9 @@ const inputRegisterUserPassword = document.getElementById(
 ) as HTMLInputElement;
 
 const allCategories = document.querySelector(".header") as HTMLHeadElement;
+const productPrice = document.querySelector(
+  ".product-price"
+) as HTMLParagraphElement;
 
 //Cart variables
 const cartIcon = document.getElementById("cart-icon") as HTMLElement;
@@ -353,15 +356,6 @@ productsCategory();
 allCategories.addEventListener("click", async () => {
   await createProduct();
 });
-
-//Products variables. Must be after createproducts
-// const productImg = document.querySelector(".product-img") as HTMLImageElement;
-// const productName = document.querySelector(
-//   ".product-name"
-// ) as HTMLParagraphElement;
-const productPrice = document.querySelector(
-  ".product-price"
-) as HTMLParagraphElement;
 
 //Create cart with current content
 const renderCart = (cart: any) => {
