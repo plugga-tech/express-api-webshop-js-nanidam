@@ -1,7 +1,19 @@
-För att starta projektet i frontend:
+## Installing Dependencies
 
-- Skriv i terminalen "npm run dev".
+    1. Open a terminal.
+    2. Navigate to the frontend directory.
+    3. Run the following command to install all dependencies:
 
-(ja, samma som backend)
+```bash
+npm i
+```
 
-Nodemon startas då.
+## Running the Frontend
+
+    1. Open a terminal.
+    2. Navigate to the frontend directory.
+    3. Run the following command to start the frontend:
+
+```bash
+npm run dev
+```
