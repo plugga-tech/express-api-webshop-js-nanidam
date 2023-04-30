@@ -8,7 +8,7 @@ const api = new API();
 // G: Get all order without key
 // router.get("/all", (req, res) => {
 //   req.app.locals["db"]
-//     .collection("orders")
+//     .collection("nani-dam-orders")
 //     .find()
 //     .project()
 //     .toArray()
@@ -28,7 +28,7 @@ router.get("/all", function (req: Request, res: Response) {
 
   if (token === validToken) {
     req.app.locals["db"]
-      .collection("orders")
+      .collection("nani-dam-orders")
       .find()
       .project()
       .toArray()
@@ -53,7 +53,7 @@ router.post("/add", function (req: Request, res: Response) {
 router.post("/user", function (req: Request, res: Response) {
   if (req.body.token === process.env["TOKEN"]) {
     req.app.locals["db"]
-      .collection("orders")
+      .collection("nani-dam-orders")
       .find({ user: req.body.user })
       .toArray()
       .then((orders: IOrder[]) => {
