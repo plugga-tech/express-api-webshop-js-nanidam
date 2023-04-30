@@ -6,43 +6,43 @@ const router = express.Router();
 const api = new API();
 
 // G: Get all order without key
-// router.get("/all", (req, res) => {
-//   req.app.locals["db"]
-//     .collection("nani-dam-orders")
-//     .find()
-//     .project()
-//     .toArray()
-//     .then((results: IOrder[]) => {
-//       if (results.length > 0) {
-//         res.json(results);
-//       } else {
-//         res.status(400).json("Could not get orders.");
-//       }
-//     });
-// });
+router.get("/all", (req, res) => {
+  req.app.locals["db"]
+    .collection("nani-dam-orders")
+    .find()
+    .project()
+    .toArray()
+    .then((results: IOrder[]) => {
+      if (results.length > 0) {
+        res.json(results);
+      } else {
+        res.status(400).json("Could not get orders.");
+      }
+    });
+});
 
 // VG: Get all orders. Must have TOKEN-key
-router.get("/all", function (req: Request, res: Response) {
-  const token = req.body.token;
-  const validToken = process.env["TOKEN"];
+// router.get("/all", function (req: Request, res: Response) {
+//   const token = req.body.token;
+//   const validToken = process.env["TOKEN"];
 
-  if (token === validToken) {
-    req.app.locals["db"]
-      .collection("nani-dam-orders")
-      .find()
-      .project()
-      .toArray()
-      .then((results: IOrder[]) => {
-        if (results.length > 0) {
-          res.status(200).json(results);
-        } else {
-          res.status(404).json("Can not get all orders");
-        }
-      });
-  } else {
-    res.status(401).json("Unauthorized");
-  }
-});
+//   if (token === validToken) {
+//     req.app.locals["db"]
+//       .collection("nani-dam-orders")
+//       .find()
+//       .project()
+//       .toArray()
+//       .then((results: IOrder[]) => {
+//         if (results.length > 0) {
+//           res.status(200).json(results);
+//         } else {
+//           res.status(404).json("Can not get all orders");
+//         }
+//       });
+//   } else {
+//     res.status(401).json("Unauthorized");
+//   }
+// });
 
 //Create order for specific user
 router.post("/add", function (req: Request, res: Response) {
