@@ -11,7 +11,7 @@ const api = new API();
 // Get all categories
 router.get("/", function (req: Request, res: Response) {
   req.app.locals["db"]
-    .collection("categories")
+    .collection("nani-dam-categories")
     .find()
     .project()
     .toArray()

@@ -9,7 +9,7 @@ const api = new API();
 // Get all products
 router.get("/", (req, res) => {
   req.app.locals["db"]
-    .collection("products")
+    .collection("nani-dam-products")
     .find()
     .project()
     .toArray()
@@ -47,7 +47,7 @@ router.get("/category/:id", (req, res) => {
   const id = req.params.id;
   console.log(id);
   req.app.locals["db"]
-    .collection("products")
+    .collection("nani-dam-products")
     .find({ category: id })
     .project()
     .toArray()
@@ -64,7 +64,7 @@ router.get("/category/:id", (req, res) => {
 router.get("/:id", (req, res) => {
   const id = req.params.id;
   req.app.locals["db"]
-    .collection("products")
+    .collection("nani-dam-products")
     .findOne({ _id: new ObjectId(id) })
     .then((results: IProduct) => {
       if (results) {

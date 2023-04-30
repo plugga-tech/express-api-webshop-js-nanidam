@@ -9,7 +9,7 @@ const api = new API();
 //get users' id, name and email. NOT password
 router.get("/", (req, res) => {
   req.app.locals["db"]
-    .collection("users")
+    .collection("nani-dam-users")
     .find()
     .project({ password: false })
     .toArray()
@@ -24,7 +24,7 @@ router.get("/", (req, res) => {
 
 router.post("/", (req, res) => {
   req.app.locals["db"]
-    .collection("users")
+    .collection("nani-dam-users")
     .findOne({ _id: new ObjectId(req.body.id) })
     .then((result: IUser) => {
       if (result) {
@@ -48,16 +48,10 @@ router.post("/login", (req: Request, res: Response) => {
   api.logInUser(req, res);
 });
 
-router.get("/test", (req, res: Response) => {
-  api.addUser(req, res);
-  console.log("add");
-  res.send(`User added!`);
-});
-
 //get specific user by id
 router.post("/:id", (req, res) => {
   req.app.locals["db"]
-    .collection("users")
+    .collection("nani-dam-users")
     .findOne({ _id: new ObjectId(req.params.id) })
     .then((result: IUser) => {
       if (result) {

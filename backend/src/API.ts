@@ -20,7 +20,7 @@ export class API {
       email: req.body.email,
     };
 
-    req.app.locals["db"].collection("users").insertOne(newUser);
+    req.app.locals["db"].collection("nani-dam-users").insertOne(newUser);
 
     if (newUser) {
       res.status(201).json({ name: newUser.name, email: newUser.email });
@@ -33,7 +33,7 @@ export class API {
     const { email, password } = req.body;
 
     req.app.locals["db"]
-      .collection("users")
+      .collection("nani-dam-users")
       .find()
       .toArray()
       .then((users: any) => {
@@ -75,11 +75,11 @@ export class API {
     //   lager: req.body.lager,
     // };
 
-    req.app.locals["db"].collection("products").insertOne(newProduct);
+    req.app.locals["db"].collection("nani-dam-products").insertOne(newProduct);
 
     //add many products
     // const newProducts: IProduct[] = req.body;
-    // req.app.locals["productsDB"].collection("products").insertMany(newProducts);
+    // req.app.locals["productsDB"].collection("nani-dam-products").insertMany(newProducts);
   }
 
   addOrder(req: Request, res: Response) {
@@ -91,7 +91,7 @@ export class API {
 
       // Decrease in quantity in "lager"
       req.app.locals["db"]
-        .collection("products")
+        .collection("nani-dam-products")
         .findOneAndUpdate(
           { _id: new ObjectId(id) },
           { $inc: { lager: -quantity } },
@@ -102,7 +102,7 @@ export class API {
         });
     });
 
-    req.app.locals["db"].collection("orders").insertOne(newOrder);
+    req.app.locals["db"].collection("nani-dam-orders").insertOne(newOrder);
 
     if (newOrder) {
       res.status(201).json(newOrder);
@@ -119,7 +119,9 @@ export class API {
 
     //check token
     if (newCategory.token) {
-      req.app.locals["db"].collection("categories").insertOne(newCategory);
+      req.app.locals["db"]
+        .collection("nani-dam-categories")
+        .insertOne(newCategory);
       res.status(201).json(newCategory);
     } else {
       res.status(406).json("Category not added");
