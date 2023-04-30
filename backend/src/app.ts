@@ -18,22 +18,6 @@ MongoClient.connect("mongodb://127.0.0.1:27017", {}).then(
 
     const db = client.db("nani-dam-API");
     app.locals["db"] = db;
-
-    // //Users
-    // const usersDB = client.db("users");
-    // app.locals["usersDB"] = usersDB;
-
-    // //Products
-    // const productsDB = client.db("products");
-    // app.locals["productsDB"] = productsDB;
-
-    // //Orders
-    // const ordersDB = client.db("orders");
-    // app.locals["ordersDB"] = ordersDB;
-
-    // //Categories
-    // const categoriesDB = client.db("categories");
-    // app.locals["categoriesDB"] = categoriesDB;
   }
 );
 
