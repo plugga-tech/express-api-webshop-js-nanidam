@@ -50,6 +50,7 @@ const allCategories = document.querySelector(".header") as HTMLHeadElement;
 const productPrice = document.querySelector(
   ".product-price"
 ) as HTMLParagraphElement;
+const productsContainer = document.querySelector(".products") as HTMLElement;
 
 //Cart variables
 const cartIcon = document.getElementById("cart-icon") as HTMLElement;
@@ -89,7 +90,6 @@ const configProduct = {
   url: "http://localhost:3000/api/products",
 };
 
-const productsContainer = document.querySelector(".products") as HTMLElement;
 const initProduct = await axios(configProduct);
 const categoriesId: ICategory[] = [];
 
